@@ -1,0 +1,1665 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dormetria — Plataforma clínica del sueño</title>
+<meta name="description" content="Plataforma clínica de seguimiento del sueño: para profesionales de la salud y para quien quiera entender su propio descanso. Seguimiento real, escalas validadas, sin fricción.">
+<meta name="color-scheme" content="only light">
+<meta name="theme-color" content="#1a4a3a">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --verde:       #1a4a3a;
+    --verde-med:   #2d6b55;
+    --verde-luz:   #3d8f70;
+    --menta:       #7ec8a4;
+    --menta-suave: #b8e4ce;
+    --crema:       #f5f0e8;
+    --crema-oscuro:#ede5d4;
+    --texto:       #1a1a1a;
+    --texto-suave: #5a5a5a;
+    --blanco:      #ffffff;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html {
+    scroll-behavior: smooth;
+    color-scheme: only light;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: #1a4a3a !important;
+    color: #ffffff;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  .hero {
+    background: #1a4a3a !important;
+  }
+
+  /* ─── NAV ─────────────────────────────────────────────── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.2rem 5vw;
+    background: rgba(26, 74, 58, 0.85);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(126, 200, 164, 0.12);
+  }
+
+  .nav-logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    letter-spacing: -0.02em;
+    color: var(--menta);
+    text-decoration: none;
+  }
+
+  .nav-links {
+    display: flex; gap: 2rem; align-items: center;
+    list-style: none;
+  }
+
+  .nav-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 400;
+    letter-spacing: 0.02em;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--menta); }
+
+  .nav-cta {
+    background: var(--menta) !important;
+    color: var(--verde) !important;
+    padding: 0.55rem 1.3rem !important;
+    border-radius: 100px;
+    font-weight: 500 !important;
+    transition: background 0.2s, transform 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--menta-suave) !important; transform: translateY(-1px); }
+
+  /* ─── HERO ────────────────────────────────────────────── */
+  .hero {
+    min-height: 100vh;
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 10rem 5vw 6rem;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(61,143,112,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(126,200,164,0.08) 0%, transparent 50%);
+  }
+
+  /* floating circles decoration */
+  .hero-bg::before {
+    content: '';
+    position: absolute; top: 15%; right: 8%;
+    width: 420px; height: 420px;
+    border-radius: 50%;
+    border: 1px solid rgba(126,200,164,0.12);
+    animation: slowPulse 8s ease-in-out infinite;
+  }
+
+  .hero-bg::after {
+    content: '';
+    position: absolute; top: 22%; right: 14%;
+    width: 260px; height: 260px;
+    border-radius: 50%;
+    border: 1px solid rgba(126,200,164,0.18);
+    animation: slowPulse 8s ease-in-out infinite 1s;
+  }
+
+  @keyframes slowPulse {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.04); opacity: 0.6; }
+  }
+
+  .hero-inner{
+    position:relative;z-index:1;max-width:1200px;margin:0 auto;width:100%;
+    display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:3rem;align-items:center;
+  }
+  .hero-content { max-width: 680px; }
+  .hero-phone{
+    width:270px;height:540px;border-radius:34px;background:#0f2820;padding:10px;
+    box-shadow:0 24px 70px rgba(0,0,0,0.32);justify-self:center;
+  }
+  .hero-phone-sc{width:100%;height:100%;border-radius:26px;overflow:hidden;background:#1a2e23}
+  @media (max-width: 920px){
+    .hero-inner{ grid-template-columns:1fr; }
+    .hero-phone{ display:none; }
+  }
+
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(126,200,164,0.12);
+    border: 1px solid rgba(126,200,164,0.25);
+    color: var(--menta);
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.4rem 1rem;
+    border-radius: 100px;
+    margin-bottom: 2rem;
+    animation: fadeUp 0.8s ease both;
+  }
+
+  .hero-badge span { width: 6px; height: 6px; background: var(--menta); border-radius: 50%; animation: blink 2s ease-in-out infinite; }
+
+  @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+  h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2.8rem, 5.5vw, 5rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    margin-bottom: 1.8rem;
+    animation: fadeUp 0.8s ease 0.1s both;
+  }
+
+  h1 em {
+    font-style: italic;
+    color: var(--menta);
+  }
+
+  .hero-sub {
+    font-size: clamp(1rem, 1.6vw, 1.2rem);
+    font-weight: 300;
+    color: rgba(255,255,255,0.7);
+    line-height: 1.7;
+    max-width: 520px;
+    margin-bottom: 2.8rem;
+    animation: fadeUp 0.8s ease 0.2s both;
+  }
+
+  .hero-actions {
+    display: flex; gap: 1rem; flex-wrap: wrap;
+    animation: fadeUp 0.8s ease 0.3s both;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--menta);
+    color: var(--verde);
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-weight: 500;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    box-shadow: 0 4px 24px rgba(126,200,164,0.25);
+  }
+
+  .btn-primary:hover { background: var(--menta-suave); transform: translateY(-2px); box-shadow: 0 8px 32px rgba(126,200,164,0.35); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: transparent;
+    color: rgba(255,255,255,0.8);
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    border: 1px solid rgba(255,255,255,0.2);
+    font-weight: 400;
+    font-size: 1rem;
+    text-decoration: none;
+    transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  }
+
+  .btn-secondary:hover { border-color: var(--menta); color: var(--menta); transform: translateY(-2px); }
+
+  .hero-patient-line {
+    margin-top: 1.4rem;
+    font-size: 0.95rem;
+    color: rgba(255,255,255,0.65);
+  }
+  .hero-patient-line a {
+    color: var(--menta);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(126,200,164,0.4);
+    transition: border-color 0.2s;
+  }
+  .hero-patient-line a:hover { border-color: var(--menta); }
+
+  /* ─── SECCIÓN PACIENTES ───────────────────────────────── */
+  .pacientes {
+    padding: 6rem 5vw;
+    background: var(--crema);
+  }
+  .pac-wrap { max-width: 1000px; margin: 0 auto; }
+  .pac-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+    margin-top: 2.5rem;
+  }
+  .pac-steps { display: flex; flex-direction: column; gap: 1.3rem; }
+  .pac-step { display: flex; gap: 1rem; align-items: flex-start; }
+  .pac-step-num {
+    flex-shrink: 0;
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: var(--verde);
+    color: var(--blanco);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.85rem; font-weight: 500;
+  }
+  .pac-step p { color: var(--texto-suave); line-height: 1.6; font-size: 0.98rem; }
+  .pac-step strong { color: var(--texto); font-weight: 500; }
+  .pac-card {
+    background: var(--blanco);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    text-align: center;
+    box-shadow: 0 8px 40px rgba(26,74,58,0.09);
+  }
+  .pac-card h3 { font-size: 1.35rem; color: var(--verde); margin-bottom: 0.6rem; font-weight: 400; }
+  .pac-card p { color: var(--texto-suave); font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.6rem; }
+  .btn-pac {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: var(--verde);
+    color: var(--blanco);
+    padding: 0.9rem 2rem;
+    border-radius: 100px;
+    font-weight: 500; font-size: 1rem;
+    text-decoration: none;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .btn-pac:hover { background: var(--verde-med); transform: translateY(-2px); }
+  .pac-note { margin-top: 1rem; font-size: 0.85rem; color: var(--texto-suave); }
+  @media (max-width: 820px) {
+    .pac-grid { grid-template-columns: 1fr; gap: 2rem; }
+  }
+
+  .hero-stats {
+    display: flex; gap: 3rem; margin-top: 5rem;
+    padding-top: 3rem;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    animation: fadeUp 0.8s ease 0.4s both;
+  }
+
+  .stat-item { display: flex; flex-direction: column; gap: 0.25rem; }
+  .stat-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 2.2rem;
+    color: var(--menta);
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.8rem; color: rgba(255,255,255,0.5); font-weight: 300; letter-spacing: 0.03em; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ─── PROBLEMA ────────────────────────────────────────── */
+  .section-problema {
+    background: var(--crema);
+    color: var(--texto);
+    padding: 7rem 5vw;
+  }
+
+  .section-problema h2 { color: var(--texto); }
+  .section-problema .label-seccion { color: var(--verde-med); }
+
+  .problema-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+  }
+
+  .label-seccion {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--verde-med);
+    margin-bottom: 1.2rem;
+  }
+
+  h2 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 3.5vw, 3rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+    color: var(--texto);
+  }
+
+  .problema-texto p {
+    color: var(--texto-suave);
+    line-height: 1.8;
+    font-size: 1.05rem;
+    font-weight: 300;
+    margin-bottom: 1rem;
+  }
+
+  .problema-cards {
+    display: flex; flex-direction: column; gap: 1rem;
+  }
+
+  .problema-card {
+    background: var(--blanco);
+    border: 1px solid var(--crema-oscuro);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    display: flex; gap: 1rem; align-items: flex-start;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .problema-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+
+  .card-icon {
+    width: 40px; height: 40px; flex-shrink: 0;
+    background: rgba(26,74,58,0.08);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+
+  .card-txt h4 { font-size: 0.95rem; font-weight: 500; color: var(--texto); margin-bottom: 0.25rem; }
+  .card-txt p  { font-size: 0.85rem; color: var(--texto-suave); line-height: 1.5; font-weight: 300; }
+
+  /* ─── COMO FUNCIONA ───────────────────────────────────── */
+  .section-como {
+    background: var(--verde);
+    padding: 7rem 5vw;
+  }
+
+  .section-como .inner { max-width: 1100px; margin: 0 auto; }
+  .section-header { text-align: center; margin-bottom: 5rem; }
+  .section-header .label-seccion { color: var(--menta); }
+  .section-header h2 { color: var(--blanco); }
+  .section-header p { color: rgba(255,255,255,0.6); font-weight: 300; font-size: 1.05rem; max-width: 500px; margin: 0 auto; }
+
+  .steps {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem;
+  }
+
+  .step {
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(126,200,164,0.15);
+    border-radius: 20px;
+    padding: 2.5rem 2rem;
+    position: relative;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .step:hover {
+    background: rgba(126,200,164,0.07);
+    border-color: rgba(126,200,164,0.3);
+  }
+
+  .step-num {
+    font-family: 'DM Serif Display', serif;
+    font-size: 4rem;
+    color: rgba(126,200,164,0.18);
+    line-height: 1;
+    margin-bottom: 1.5rem;
+    display: block;
+  }
+
+  .step h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--blanco);
+    margin-bottom: 0.8rem;
+  }
+
+  .step p { color: rgba(255,255,255,0.6); font-weight: 300; line-height: 1.7; font-size: 0.95rem; }
+
+  .step-connector {
+    display: none;
+  }
+
+  /* ─── FEATURES ────────────────────────────────────────── */
+  .section-features {
+    background: var(--crema);
+    color: var(--texto);
+    padding: 7rem 5vw;
+  }
+
+  .section-features .inner { max-width: 1100px; margin: 0 auto; }
+  .section-features .section-header { text-align: left; margin-bottom: 1rem; }
+  .section-features .section-header h2 { color: var(--texto); }
+  .section-features h4 { color: var(--texto); }
+  .section-features p  { color: var(--texto-suave); }
+  .section-features .section-header .label-seccion { color: var(--verde-med); }
+
+  .features-tabs {
+    display: flex; gap: 0.75rem; margin-bottom: 3.5rem; margin-top: 2rem;
+  }
+
+  .tab-btn {
+    padding: 0.6rem 1.4rem;
+    border-radius: 100px;
+    border: 1.5px solid var(--verde-med);
+    background: transparent;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--verde);
+  }
+
+  .tab-btn.active {
+    background: var(--verde);
+    color: var(--blanco);
+    border-color: var(--verde);
+  }
+
+  .tab-btn:hover:not(.active) { border-color: var(--verde); color: var(--verde); }
+
+  .features-panel { display: none; }
+  .features-panel.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+
+  .feature-card {
+    background: var(--blanco);
+    border: 1px solid var(--crema-oscuro);
+    border-radius: 18px;
+    padding: 1.8rem;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+
+  .feature-card:hover { transform: translateY(-3px); box-shadow: 0 12px 32px rgba(0,0,0,0.07); }
+
+  .feature-icon {
+    width: 46px; height: 46px;
+    background: var(--menta-suave);
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.2rem;
+  }
+  .feature-icon svg{ display:block; }
+
+  .feature-card h4 { font-size: 1rem; font-weight: 500; color: var(--texto); margin-bottom: 0.5rem; }
+  .feature-card p  { font-size: 0.88rem; color: var(--texto-suave); line-height: 1.6; font-weight: 300; }
+
+  /* ─── BETA ─────────────────────────────────────────────── */
+  .section-beta {
+    background: var(--verde-med);
+    padding: 7rem 5vw;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .section-beta::before {
+    content: '';
+    position: absolute; top: -100px; right: -100px;
+    width: 500px; height: 500px;
+    background: radial-gradient(circle, rgba(126,200,164,0.12) 0%, transparent 60%);
+    border-radius: 50%;
+  }
+
+  .beta-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 6rem; align-items: center;
+    position: relative; z-index: 1;
+  }
+
+  .beta-texto .label-seccion { color: var(--menta); }
+  .beta-texto h2 { color: var(--blanco); margin-bottom: 1.2rem; }
+  .beta-texto p { color: rgba(255,255,255,0.7); font-weight: 300; line-height: 1.8; font-size: 1.05rem; margin-bottom: 1rem; }
+
+  .beta-lista {
+    list-style: none;
+    margin-top: 1.5rem;
+    display: flex; flex-direction: column; gap: 0.75rem;
+  }
+
+  .beta-lista li {
+    display: flex; align-items: center; gap: 0.75rem;
+    color: rgba(255,255,255,0.85);
+    font-size: 0.95rem;
+    font-weight: 300;
+  }
+
+  .beta-lista li::before {
+    content: '✓';
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 22px; height: 22px;
+    background: rgba(126,200,164,0.2);
+    border-radius: 50%;
+    color: var(--menta);
+    font-size: 0.7rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+
+  .beta-form {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 24px;
+    padding: 2.5rem;
+  }
+
+  .beta-form h3 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.5rem;
+    color: var(--blanco);
+    margin-bottom: 0.5rem;
+  }
+
+  .beta-form .form-sub {
+    color: rgba(255,255,255,0.55);
+    font-size: 0.88rem;
+    font-weight: 300;
+    margin-bottom: 1.8rem;
+  }
+
+  .form-group {
+    display: flex; flex-direction: column; gap: 0.5rem;
+    margin-bottom: 1rem;
+  }
+
+  .form-group label {
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+
+  .form-group input,
+  .form-group select {
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    color: var(--blanco);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 300;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+
+  .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+  .form-group input:focus,
+  .form-group select:focus { border-color: var(--menta); }
+  .form-group select option { background: var(--verde); }
+
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+  .btn-form {
+    width: 100%;
+    background: var(--menta);
+    color: var(--verde);
+    border: none;
+    padding: 1rem;
+    border-radius: 10px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+    margin-top: 0.5rem;
+  }
+
+  .btn-form:hover { background: var(--menta-suave); transform: translateY(-1px); }
+
+  .form-disclaimer {
+    text-align: center;
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.35);
+    margin-top: 1rem;
+    font-weight: 300;
+    line-height: 1.5;
+  }
+
+  /* ─── FOOTER ──────────────────────────────────────────── */
+  footer {
+    background: #111f1a;
+    padding: 3.5rem 5vw;
+    border-top: 1px solid rgba(126,200,164,0.1);
+  }
+
+  .footer-inner {
+    max-width: 1100px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 2rem;
+  }
+
+  .footer-marca {
+    display: flex; flex-direction: column; gap: 0.4rem;
+  }
+
+  .footer-marca .logo {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--menta);
+    text-decoration: none;
+  }
+
+  .footer-marca p {
+    font-size: 0.8rem;
+    color: rgba(255,255,255,0.35);
+    font-weight: 300;
+  }
+
+  .footer-links {
+    display: flex; gap: 2rem; list-style: none;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.45);
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 300;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--menta); }
+
+  .footer-copy {
+    font-size: 0.75rem;
+    color: rgba(255,255,255,0.25);
+    font-weight: 300;
+  }
+
+  /* ─── SUCCESS STATE ───────────────────────────────────── */
+  .success-msg {
+    display: none;
+    text-align: center;
+    padding: 2rem;
+  }
+
+  .success-msg .success-icon {
+    width: 56px; height: 56px;
+    background: rgba(126,200,164,0.2);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.5rem;
+    margin: 0 auto 1rem;
+  }
+
+  .success-msg h4 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.4rem;
+    color: var(--blanco);
+    margin-bottom: 0.5rem;
+  }
+
+  .success-msg p {
+    color: rgba(255,255,255,0.6);
+    font-size: 0.9rem;
+    font-weight: 300;
+  }
+
+  /* ─── SCROLL REVEAL ───────────────────────────────────── */
+  .reveal {
+    opacity: 0;
+    transform: translateY(28px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+
+  /* ─── DEMOS ANIMADAS DE LA APP ────────────────────────── */
+  @keyframes dmoC3{0%,28%{transform:translateY(0)}33%,61%{transform:translateY(-100%)}66%,94%{transform:translateY(-200%)}100%{transform:translateY(0)}}
+  @keyframes dmoC2{0%,45%{transform:translateY(0)}50%,95%{transform:translateY(-100%)}100%{transform:translateY(0)}}
+  @keyframes dmoBar{0%{transform:scaleY(.15)}100%{transform:scaleY(1)}}
+  @keyframes dmoSweep{0%{transform:translateX(-110%)}100%{transform:translateX(110%)}}
+  @keyframes dmoFade{0%,20%{opacity:0}35%,85%{opacity:1}100%{opacity:0}}
+  .dmo-phone{
+    width:230px;height:460px;border-radius:30px;background:#0f2820;
+    padding:9px;box-shadow:0 18px 50px rgba(26,74,58,.28);flex-shrink:0;
+  }
+  .dmo-screen{width:100%;height:100%;border-radius:22px;overflow:hidden;position:relative;background:#1a2e23}
+  .dmo-track{position:absolute;inset:0;display:flex;flex-direction:column}
+  .dmo-pane{height:100%;flex-shrink:0;padding:14px;box-sizing:border-box;color:#F4EFE5;font-size:11.5px}
+  .dmo-card{background:rgba(255,255,255,.07);border-radius:10px;padding:9px 10px;margin-bottom:7px}
+  .dmo-lbl{font-size:8.5px;color:rgba(244,239,229,.5);letter-spacing:.07em;text-transform:uppercase}
+  .dmo-laptop{
+    width:100%;max-width:560px;border-radius:12px;background:#0f2820;
+    padding:10px;box-shadow:0 18px 50px rgba(26,74,58,.28);
+  }
+  .dmo-lscreen{border-radius:7px;overflow:hidden;background:#1a2e23;position:relative}
+  .dmo-row{display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:.5px solid rgba(255,255,255,.07)}
+  .dmo-stripe{width:3px;height:28px;border-radius:2px;flex-shrink:0}
+  .dmo-tag{font-size:8px;font-weight:500;padding:1.5px 6px;border-radius:99px;white-space:nowrap}
+  .dmo-caption{font-size:.85rem;color:var(--texto-suave);text-align:center;margin-top:1rem;font-style:italic}
+
+  /* ─── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .problema-inner, .beta-inner { grid-template-columns: 1fr; gap: 3rem; }
+    .steps { grid-template-columns: 1fr; }
+    .pac-grid { grid-template-columns: 1fr; gap: 2rem; }
+    .features-panel.active { grid-template-columns: 1fr 1fr; }
+    .hero-stats { gap: 2rem; }
+    .footer-inner { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+    .form-row { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 600px) {
+    .features-panel.active { grid-template-columns: 1fr; }
+    .hero-stats { flex-direction: column; gap: 1.5rem; }
+    .features-tabs { flex-wrap: wrap; }
+  }
+  /* La demo tipo notebook del profesional se apila en móvil (antes se
+     comprimía y quedaba ilegible). */
+  @media (max-width: 760px){
+    .dmo-laptop{ max-width:100% !important; }
+    .dmo-laptop .dmo-lscreen{ grid-template-columns:1fr !important; }
+    .dmo-laptop .dmo-lscreen > div:last-child{ display:none; }
+  }
+
+  /* ─── Selector de audiencia (primera visita) ─── */
+  #dm-audience{
+    position:fixed; inset:0; z-index:9999;
+    background:rgba(15,40,32,0.96);
+    display:flex; align-items:center; justify-content:center; padding:24px;
+    opacity:0; pointer-events:none; transition:opacity .3s;
+  }
+  #dm-audience.on{ opacity:1; pointer-events:auto; }
+  .dm-aud-card{
+    background:var(--crema); border-radius:24px; padding:36px 30px; max-width:560px; width:100%;
+    text-align:center; box-shadow:0 30px 80px rgba(0,0,0,.4);
+  }
+  .dm-aud-title{ font-family:'DM Serif Display',serif; font-size:1.9rem; color:var(--verde); margin-bottom:6px; }
+  .dm-aud-sub{ color:var(--texto-suave); font-size:.98rem; margin-bottom:26px; line-height:1.5; }
+  .dm-aud-opts{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .dm-aud-opt{
+    background:var(--blanco); border:1.5px solid var(--crema-oscuro); border-radius:18px;
+    padding:22px 18px; cursor:pointer; transition:all .18s; text-align:left;
+  }
+  .dm-aud-opt:hover{ border-color:var(--menta); transform:translateY(-3px); box-shadow:0 12px 30px rgba(26,74,58,.1); }
+  .dm-aud-opt .ic{ width:44px; height:44px; border-radius:12px; background:var(--menta-suave); display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
+  .dm-aud-opt h4{ font-size:1.05rem; color:var(--verde); margin-bottom:4px; font-weight:600; }
+  .dm-aud-opt p{ font-size:.82rem; color:var(--texto-suave); line-height:1.45; }
+  .dm-aud-skip{ margin-top:20px; background:none; border:none; color:var(--texto-suave); font-size:.85rem; cursor:pointer; text-decoration:underline; }
+  @media (max-width:520px){ .dm-aud-opts{ grid-template-columns:1fr; } }
+
+  /* ─── Filtrado de la landing por audiencia ─── */
+  body.aud-pro .only-patient,
+  body.aud-patient .only-pro { display:none !important; }
+  body.aud-pro .nav-link-patient,
+  body.aud-patient .nav-link-pro { display:none; }
+  /* Toggle Profesional/Paciente en el nav (aparece recién cuando se elige) */
+  .aud-switch{ display:none; align-items:center; gap:2px; background:var(--crema); border-radius:999px; padding:3px; }
+  body.aud-pro .aud-switch, body.aud-patient .aud-switch{ display:inline-flex; }
+  .aud-switch button{ border:none; background:none; font-size:.78rem; padding:5px 12px; border-radius:999px; cursor:pointer; color:var(--texto-suave); font-family:inherit; transition:all .15s; }
+  .aud-switch button.on{ background:var(--verde); color:#fff; }
+  /* Cinta de contexto arriba de todo, dice a quién le hablamos */
+  .aud-ribbon{ display:none; text-align:center; font-size:.8rem; padding:7px 16px; background:var(--menta-suave); color:var(--verde); }
+  body.aud-pro .aud-ribbon-pro, body.aud-patient .aud-ribbon-patient{ display:block; }
+  .aud-ribbon a{ color:var(--verde); font-weight:600; text-decoration:underline; cursor:pointer; }
+
+  /* ══════════════════════════════════════════════════════════════
+     PASE ESTETICO — aire, tipografia y ritmo tipo apple.com
+     Va al final a proposito: son refinamientos sobre lo que ya
+     existe, no un rediseno desde cero (menos riesgo de romper).
+     ══════════════════════════════════════════════════════════════ */
+
+  /* 1. TIPOGRAFIA — mas grande, mas apretada, mas silencio alrededor. */
+  h1{
+    font-size: clamp(3.2rem, 7vw, 6.4rem);
+    line-height: 0.98;
+    letter-spacing: -0.042em;
+    margin-bottom: 2.2rem;
+  }
+  h2{
+    font-size: clamp(2.4rem, 4.6vw, 4rem);
+    line-height: 1.04;
+    letter-spacing: -0.032em;
+    margin-bottom: 1.8rem;
+  }
+  .hero-sub{
+    font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+    line-height: 1.55;
+    font-weight: 300;
+    letter-spacing: -0.011em;
+    max-width: 30ch;
+  }
+  .section-header p{
+    font-size: clamp(1.05rem, 1.4vw, 1.25rem);
+    line-height: 1.55;
+    letter-spacing: -0.011em;
+    max-width: 46ch;
+  }
+  /* La etiqueta de seccion deja de gritar. */
+  .label-seccion{
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    opacity: 0.75;
+    margin-bottom: 1rem;
+  }
+
+  /* 2. AIRE — el espacio en blanco es el que hace el trabajo. */
+  .section-problema,
+  .section-como,
+  .section-features,
+  .pacientes,
+  .section-beta{
+    padding-top: clamp(6rem, 12vh, 11rem);
+    padding-bottom: clamp(6rem, 12vh, 11rem);
+  }
+  .section-header{
+    margin-bottom: clamp(3.5rem, 7vh, 6rem);
+    max-width: 900px; margin-left: auto; margin-right: auto;
+  }
+
+  /* 3. REVEAL — mas lento, con escala minima. Apple nunca sacude nada. */
+  .reveal{
+    opacity: 0;
+    transform: translateY(24px) scale(0.985);
+    transition: opacity 1s cubic-bezier(.22,.61,.36,1),
+                transform 1s cubic-bezier(.22,.61,.36,1);
+    will-change: opacity, transform;
+  }
+  .reveal.visible{ opacity: 1; transform: translateY(0) scale(1); }
+  /* Entrada escalonada de las tarjetas de una grilla. */
+  .features-panel.active > *,
+  .steps > *,
+  .pac-grid > *{
+    opacity: 0; transform: translateY(20px);
+    transition: opacity .85s cubic-bezier(.22,.61,.36,1),
+                transform .85s cubic-bezier(.22,.61,.36,1);
+  }
+  .features-panel.active.dm-in > *,
+  .steps.dm-in > *,
+  .pac-grid.dm-in > *{ opacity: 1; transform: none; }
+  .dm-in > *:nth-child(1){ transition-delay:.02s } .dm-in > *:nth-child(2){ transition-delay:.07s }
+  .dm-in > *:nth-child(3){ transition-delay:.12s } .dm-in > *:nth-child(4){ transition-delay:.17s }
+  .dm-in > *:nth-child(5){ transition-delay:.22s } .dm-in > *:nth-child(6){ transition-delay:.27s }
+  .dm-in > *:nth-child(7){ transition-delay:.32s } .dm-in > *:nth-child(8){ transition-delay:.37s }
+  .dm-in > *:nth-child(9){ transition-delay:.42s } .dm-in > *:nth-child(10){ transition-delay:.47s }
+  .dm-in > *:nth-child(11){ transition-delay:.52s } .dm-in > *:nth-child(12){ transition-delay:.57s }
+  @media (prefers-reduced-motion: reduce){
+    .reveal, .features-panel.active > *, .steps > *, .pac-grid > *{
+      opacity:1 !important; transform:none !important; transition:none !important;
+    }
+  }
+
+  /* 4. NAV — transparente arriba, solida al bajar. */
+  nav{
+    background: transparent;
+    border-bottom: 1px solid transparent;
+    transition: background .35s ease, border-color .35s ease, padding .35s ease;
+    padding-top: 1.5rem; padding-bottom: 1.5rem;
+  }
+  nav.dm-scrolled{
+    background: rgba(26,74,58,0.72);
+    -webkit-backdrop-filter: saturate(180%) blur(20px);
+    backdrop-filter: saturate(180%) blur(20px);
+    border-bottom-color: rgba(126,200,164,0.14);
+    padding-top: 0.9rem; padding-bottom: 0.9rem;
+  }
+  .nav-links a{ font-size: 0.86rem; letter-spacing: -0.005em; }
+
+  /* 5. BOTONES — pill, sin sombra dura, con respuesta al toque. */
+  .btn-primary, .btn-secondary, .nav-cta{
+    border-radius: 980px;
+    transition: transform .25s cubic-bezier(.22,.61,.36,1), opacity .25s ease, background .25s ease;
+    letter-spacing: -0.01em;
+  }
+  .btn-primary:hover, .nav-cta:hover{ transform: translateY(-1px); opacity: .92; }
+  .btn-primary:active, .btn-secondary:active, .nav-cta:active{ transform: scale(.975); }
+
+  /* 6. Bordes y tarjetas mas suaves y consistentes. */
+  .dm-aud-card{ border-radius: 28px; }
+  .dm-aud-opt{ border-radius: 20px; }
+
+  /* 7. Movil: el titular no puede comerse la pantalla. */
+  @media (max-width: 600px){
+    h1{ font-size: clamp(2.6rem, 11vw, 3.4rem); letter-spacing: -0.035em; }
+    h2{ font-size: clamp(2rem, 8.5vw, 2.6rem); }
+    .hero-sub, .section-header p{ max-width: none; }
+    .section-problema, .section-como, .section-features,
+    .pacientes, .section-beta{ padding-top: 5rem; padding-bottom: 5rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- CINTAS DE CONTEXTO POR AUDIENCIA -->
+<div class="aud-ribbon aud-ribbon-pro">Estás viendo Dormetria <strong>para profesionales</strong>. ¿Buscás medir tu propio sueño? <a onclick="dmChooseAudience('patient')">Cambiar a vista paciente</a></div>
+<div class="aud-ribbon aud-ribbon-patient">Estás viendo Dormetria <strong>para medir tu sueño</strong>. ¿Sos profesional de la salud? <a onclick="dmChooseAudience('pro')">Cambiar a vista profesional</a></div>
+
+<!-- SELECTOR DE AUDIENCIA (primera visita) -->
+<div id="dm-audience">
+  <div class="dm-aud-card">
+    <div class="dm-aud-title">¿Qué te trae a Dormetria?</div>
+    <div class="dm-aud-sub">Ordenamos la página para vos. Después podés cambiar de vista arriba, cuando quieras.</div>
+    <div class="dm-aud-opts">
+      <div class="dm-aud-opt" onclick="dmChooseAudience('pro')">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h4>Soy profesional de la salud</h4>
+        <p>Seguimiento clínico del sueño de mis pacientes: panel, escalas y métricas.</p>
+      </div>
+      <div class="dm-aud-opt" onclick="dmChooseAudience('patient')">
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></div>
+        <h4>Quiero medir mi propio sueño</h4>
+        <p>Registrar mi descanso y entender cómo duermo, con o sin profesional.</p>
+      </div>
+    </div>
+    <button class="dm-aud-skip" onclick="dmChooseAudience('skip')">Ver todo</button>
+  </div>
+</div>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-logo" style="display:flex;align-items:center"><svg viewBox="36 33 635 126" height="26" fill="currentColor" style="display:block" aria-label="Dormetria"><path d="M145 74 L 139 76 L 142 75 L 152 75 L 159 77 L 166 81 L 175 90 L 180 99 L 182 106 L 182 121 L 181 122 L 181 125 L 175 137 L 163 148 L 156 151 L 153 151 L 152 152 L 138 152 L 130 149 L 123 144 L 132 151 L 141 155 L 145 155 L 146 156 L 161 156 L 174 151 L 180 147 L 188 138 L 194 125 L 195 109 L 190 94 L 186 88 L 177 80 L 163 74 L 156 74 L 155 73 Z" fill-rule="evenodd"/><path d="M104 34 L 94 36 L 84 40 L 85 42 L 88 42 L 92 47 L 92 83 L 90 84 L 87 80 L 79 75 L 76 75 L 75 74 L 63 74 L 62 75 L 59 75 L 50 80 L 45 85 L 39 95 L 37 101 L 37 105 L 36 106 L 36 124 L 37 125 L 38 133 L 43 143 L 51 151 L 58 155 L 61 155 L 62 156 L 73 156 L 74 155 L 77 155 L 83 152 L 88 147 L 91 142 L 93 143 L 94 155 L 95 156 L 102 153 L 112 151 L 111 148 L 109 148 L 106 146 L 104 140 Z M70 79 L 74 79 L 82 82 L 89 90 L 92 100 L 92 129 L 91 130 L 91 133 L 88 140 L 81 147 L 76 149 L 68 149 L 61 146 L 54 139 L 51 133 L 50 125 L 49 124 L 49 104 L 50 103 L 51 96 L 56 87 L 60 83 L 65 80 L 69 80 Z" fill-rule="evenodd"/><path d="M248 74 L 238 75 L 232 79 L 226 89 L 224 88 L 224 75 L 223 74 L 205 80 L 205 82 L 208 82 L 212 86 L 212 147 L 210 150 L 204 152 L 205 154 L 234 154 L 234 152 L 229 151 L 226 149 L 224 143 L 224 108 L 225 107 L 225 102 L 229 91 L 234 86 L 236 85 L 244 85 L 250 88 L 251 83 L 254 77 Z" fill-rule="evenodd"/><path d="M260 79 L 260 82 L 263 82 L 267 86 L 267 90 L 268 91 L 268 142 L 267 143 L 267 148 L 264 151 L 260 152 L 260 154 L 288 154 L 288 152 L 284 151 L 280 147 L 280 101 L 286 88 L 290 84 L 294 82 L 305 82 L 307 83 L 312 88 L 315 97 L 315 146 L 311 151 L 307 153 L 308 154 L 335 154 L 335 152 L 331 151 L 329 149 L 327 142 L 327 104 L 328 103 L 328 99 L 330 93 L 333 88 L 336 85 L 342 82 L 352 82 L 357 85 L 361 91 L 362 99 L 363 100 L 363 143 L 361 149 L 359 151 L 355 152 L 355 154 L 383 154 L 383 152 L 379 151 L 375 146 L 375 100 L 374 99 L 374 93 L 371 84 L 369 81 L 364 77 L 357 74 L 346 74 L 340 76 L 331 84 L 327 91 L 325 90 L 325 88 L 322 82 L 318 78 L 313 75 L 310 75 L 309 74 L 298 74 L 288 79 L 281 88 L 279 87 L 279 74 L 267 78 Z" fill-rule="evenodd"/><path d="M418 74 L 406 79 L 396 90 L 391 102 L 391 106 L 390 107 L 390 124 L 391 125 L 391 129 L 393 135 L 399 145 L 409 153 L 411 153 L 414 155 L 417 155 L 418 156 L 431 156 L 432 155 L 435 155 L 444 150 L 451 142 L 454 137 L 455 132 L 452 131 L 449 137 L 439 145 L 432 147 L 426 147 L 419 145 L 413 141 L 408 135 L 403 123 L 402 111 L 403 110 L 455 110 L 455 101 L 454 100 L 453 93 L 450 87 L 444 80 L 435 75 L 432 75 L 431 74 Z M403 98 L 407 88 L 411 83 L 417 79 L 426 78 L 432 80 L 438 86 L 441 92 L 443 104 L 442 105 L 404 105 L 403 104 Z" fill-rule="evenodd"/><path d="M481 53 L 479 55 L 479 59 L 475 68 L 470 73 L 464 76 L 461 76 L 461 80 L 470 80 L 472 82 L 472 144 L 476 152 L 484 156 L 493 156 L 499 153 L 505 147 L 505 145 L 504 144 L 499 148 L 496 149 L 490 149 L 488 148 L 484 143 L 484 140 L 483 139 L 483 81 L 484 80 L 504 80 L 504 76 L 485 76 L 483 74 L 483 53 Z" fill-rule="evenodd"/><path d="M554 74 L 546 78 L 539 88 L 537 87 L 536 84 L 536 74 L 517 80 L 517 82 L 522 83 L 525 87 L 525 147 L 523 150 L 518 152 L 518 154 L 546 154 L 546 152 L 543 152 L 538 148 L 538 140 L 537 139 L 537 110 L 538 109 L 539 98 L 542 91 L 546 87 L 554 84 Z" fill-rule="evenodd"/><path d="M582 74 L 562 80 L 562 82 L 567 83 L 570 88 L 570 144 L 569 145 L 569 148 L 566 151 L 562 152 L 562 154 L 590 154 L 590 152 L 584 150 L 582 147 Z M580 43 L 575 46 L 573 50 L 573 54 L 574 57 L 577 60 L 584 61 L 588 59 L 590 56 L 590 49 L 586 44 Z" fill-rule="evenodd"/><path d="M613 79 L 610 81 L 606 86 L 603 93 L 603 96 L 614 99 L 615 91 L 619 83 L 624 79 L 633 78 L 640 81 L 644 86 L 646 92 L 646 101 L 643 105 L 637 108 L 617 114 L 609 118 L 602 125 L 599 135 L 600 136 L 600 142 L 603 148 L 610 154 L 616 156 L 628 156 L 636 153 L 641 149 L 644 144 L 646 143 L 647 144 L 647 148 L 651 154 L 655 156 L 662 156 L 666 154 L 670 149 L 669 148 L 662 149 L 659 146 L 659 140 L 658 139 L 658 112 L 659 111 L 658 110 L 658 93 L 655 85 L 652 81 L 647 77 L 637 74 L 626 74 Z M645 109 L 647 115 L 646 118 L 646 134 L 642 142 L 638 146 L 632 149 L 622 149 L 618 147 L 614 143 L 612 138 L 612 130 L 614 125 L 622 118 L 628 115 L 638 112 L 643 109 Z" fill-rule="evenodd"/></svg></a>
+  <ul class="nav-links">
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li class="nav-link-pro"><a href="#para-medicos">Para profesionales</a></li>
+    <li class="nav-link-patient"><a href="#pacientes">Para pacientes</a></li>
+    <li><a href="#beta">Beta</a></li>
+    <li class="aud-switch-li"><div class="aud-switch">
+      <button data-aud="pro" onclick="dmChooseAudience('pro')">Profesional</button>
+      <button data-aud="patient" onclick="dmChooseAudience('patient')">Paciente</button>
+    </div></li>
+    <li><a href="https://app.dormetria.com" class="nav-cta">Entrar a la app</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-inner">
+  <div class="hero-content">
+    <div class="hero-badge"><span></span> Beta abierta</div>
+    <h1>El sueño,<br><em>medido en serio.</em></h1>
+    <p class="hero-sub">Dormetria convierte el sueño en datos que sirven: diario, escalas validadas, actograma y métricas clínicas. Usala con tu profesional de la salud — o por tu cuenta, para entender cómo dormís de verdad.</p>
+    <div class="hero-actions">
+      <a href="#beta" class="btn-primary">
+        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        Quiero ser beta tester
+      </a>
+      <a href="https://app.dormetria.com" class="btn-secondary">Entrar a la app</a>
+    </div>
+    <div class="hero-patient-line">
+      ¿Querés medir tu propio sueño? <a href="https://app.dormetria.com">Empezá ahora</a> — y si tenés profesional, compartile tu código.
+    </div>
+    <div class="hero-stats">
+      <div class="stat-item">
+        <span class="stat-num">35+</span>
+        <span class="stat-label">Escalas validadas</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">100%</span>
+        <span class="stat-label">Clínico, sin ruido</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">iOS & Android</span>
+        <span class="stat-label">Sin descargar, se instala sola</span>
+      </div>
+    </div>
+  </div>
+  <div class="hero-phone"><div class="hero-phone-sc">
+    <div style="padding:14px;color:#F4EFE5;font-size:12px">
+      <div style="font-size:9px;color:#7ec8a4;letter-spacing:.08em">TU SUEÑO ESTA SEMANA</div>
+      <div style="background:#eef8f5;border-radius:14px;padding:14px;text-align:center;margin:8px 0 10px">
+        <div style="font-size:7.5px;color:#1a4a3a;letter-spacing:.1em;font-weight:600">SCORE DE SUEÑO</div>
+        <div style="font-size:38px;color:#1a4a3a;line-height:1.05;font-weight:300">71</div>
+        <div style="font-size:12px;color:#1a4a3a;font-weight:500">Bueno</div>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:10px">
+        <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#d97706;letter-spacing:.05em">CANTIDAD</div><div style="font-size:15px;font-weight:700;color:#F4EFE5">67<span style="font-size:9px">%</span></div></div>
+        <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#2dd4bf;letter-spacing:.05em">FRAGM.</div><div style="font-size:15px;font-weight:700;color:#F4EFE5">75<span style="font-size:9px">%</span></div></div>
+        <div style="flex:1;background:rgba(255,255,255,0.06);border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#fbbf24;letter-spacing:.05em">REGUL.</div><div style="font-size:15px;font-weight:700;color:#F4EFE5">77<span style="font-size:9px">%</span></div></div>
+      </div>
+      <div style="font-size:8.5px;color:rgba(244,239,229,0.5);letter-spacing:.06em;margin-bottom:4px">ACTOGRAMA</div>
+      <div id="heroActo"></div>
+    </div>
+  </div></div>
+  </div>
+</section>
+
+<!-- EL PROBLEMA -->
+<section class="section-problema">
+  <div class="problema-inner">
+    <div class="problema-texto reveal">
+      <p class="label-seccion">El problema</p>
+      <h2>El seguimiento del sueño está roto.</h2>
+      <p>Entre consultas, tus pacientes no tienen forma estructurada de registrar lo que les pasa. Vos no tenés manera de ver la evolución real. Las escalas se aplican en papel, si es que se aplican.</p>
+      <p>El resultado: decisiones clínicas basadas en lo que el paciente recuerda, no en lo que realmente vivió.</p>
+    </div>
+    <div class="problema-cards reveal">
+      <div class="problema-card">
+        <div class="card-icon">📋</div>
+        <div class="card-txt">
+          <h4>Escalas en papel o PDF</h4>
+          <p>Se pierden, no se pueden comparar entre sesiones, y no generan ninguna alerta clínica.</p>
+        </div>
+      </div>
+      <div class="problema-card">
+        <div class="card-icon">💬</div>
+        <div class="card-txt">
+          <h4>WhatsApp como historia clínica</h4>
+          <p>Mensajes de voz, fotos de planillas, notas al margen. Funciona, pero no escala ni es seguro.</p>
+        </div>
+      </div>
+      <div class="problema-card">
+        <div class="card-icon">🔍</div>
+        <div class="card-txt">
+          <h4>Cero trazabilidad entre consultas</h4>
+          <p>No hay forma de ver si el paciente mejoró, empeoró, o si cumplió las indicaciones.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="section-como" id="como-funciona">
+  <div class="inner">
+    <div class="section-header reveal">
+      <p class="label-seccion">Cómo funciona</p>
+      <h2>Simple para quien registra.<br>Potente para quien interpreta.</h2>
+      <p>Tres pasos que transforman el seguimiento clínico del sueño.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <span class="step-num">01</span>
+        <h3>El profesional configura</h3>
+        <p>Creás tu perfil profesional, seleccionás las escalas que usás en tu práctica y personalizás el seguimiento para cada paciente.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">02</span>
+        <h3>El paciente registra</h3>
+        <p>Desde su celular, el paciente completa su diario de sueño y responde las escalas que le indicaste. Sin fricción, sin papel.</p>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">03</span>
+        <h3>Vos tomás mejores decisiones</h3>
+        <p>En tu panel ves la evolución real: gráficos, tendencias, alertas y comparación entre consultas. Todo listo para la próxima sesión.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="only-patient" style="padding:0 5vw 5rem">
+<div style="max-width:1000px;margin:0 auto">
+<div style="display:flex;justify-content:center;gap:22px;flex-wrap:wrap">
+  <div class="dmo-phone" style="height:400px"><div class="dmo-screen">
+    <div class="dmo-track" style="animation:dmoC2 9s infinite">
+      <div class="dmo-pane" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
+        <div style="font-size:30px">📲</div>
+        <div style="font-size:13px;margin-top:9px">Instalá Dormetria</div>
+        <div style="font-size:10px;color:rgba(244,239,229,.62);margin-top:6px;line-height:1.5">Ícono propio en tu teléfono,<br>sin pasar por ninguna tienda</div>
+        <div style="background:#C8A96E;color:#0F2820;border-radius:22px;padding:7px 18px;font-size:10.5px;margin-top:14px;font-weight:500">Cómo instalarla</div>
+        <div style="font-size:8.5px;color:rgba(244,239,229,.4);margin-top:9px">Funciona en iPhone y Android</div>
+      </div>
+      <div class="dmo-pane" style="display:flex;flex-direction:column;justify-content:center">
+        <div style="background:rgba(255,255,255,.11);border-radius:13px;padding:11px;display:flex;gap:10px;align-items:flex-start">
+          <div style="font-size:19px">🌙</div>
+          <div>
+            <div style="font-size:11px">Dormetria</div>
+            <div style="font-size:10px;color:rgba(244,239,229,.72);margin-top:3px;line-height:1.45">Buen día Ada. ¿Cómo dormiste anoche? Registralo en un minuto.</div>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:8.5px;color:rgba(244,239,229,.4);margin-top:11px">Recordatorio diario · 8:00</div>
+      </div>
+    </div>
+  </div></div>
+
+  <div class="dmo-phone" style="height:400px"><div class="dmo-screen" style="background:#fff">
+    <div class="dmo-pane" style="color:#1a1a1a;padding:13px">
+      <div style="font-size:8.5px;color:#666;letter-spacing:.07em">HISTORIAL DE ESCALAS</div>
+      <div style="margin-top:9px">
+        <div style="background:#fdf0f0;border-radius:9px;padding:8px 10px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10.5px">Insomnio (ISI)</span><b style="font-size:13px;color:#991b1b">18</b></div>
+          <div style="font-size:8.5px;color:#991b1b;margin-top:2px">Insomnio moderado · 14/07/26</div>
+          <div style="font-size:8px;color:#888;margin-top:3px">Previa: 22 (12/06/26) · −4</div>
+        </div>
+        <div style="background:#fef9ec;border-radius:9px;padding:8px 10px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10.5px">Somnolencia (ESS)</span><b style="font-size:13px;color:#b45309">11</b></div>
+          <div style="font-size:8.5px;color:#b45309;margin-top:2px">Somnolencia leve · 02/07/26</div>
+        </div>
+        <div style="background:#f0fdf4;border-radius:9px;padding:8px 10px;margin-bottom:6px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10.5px">Calidad (PSQI)</span><b style="font-size:13px;color:#15803d">6</b></div>
+          <div style="font-size:8.5px;color:#15803d;margin-top:2px">Mejoró respecto a la anterior · 28/06/26</div>
+        </div>
+        <div style="background:#f4f4f0;border-radius:9px;padding:8px 10px">
+          <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:10.5px">Cronotipo (MEQ)</span><b style="font-size:13px;color:#1a4a3a">44</b></div>
+          <div style="font-size:8.5px;color:#666;margin-top:2px">Intermedio · 20/06/26</div>
+        </div>
+      </div>
+      <div style="font-size:8.5px;color:#888;margin-top:10px;font-style:italic">Más de 35 escalas validadas, con puntaje automático.</div>
+    </div>
+  </div></div>
+</div>
+<p class="dmo-caption">Se instala sin tienda de apps, recuerda registrar y guarda cada escala con su evolución.</p>
+</div>
+</section>
+
+<!-- FEATURES -->
+<section class="section-features only-pro" id="para-medicos">
+  <div class="inner">
+    <div class="section-header reveal">
+      <p class="label-seccion">Funcionalidades</p>
+      <h2>Todo lo que necesitás,<br>nada de lo que no.</h2>
+    </div>
+    <div class="features-tabs reveal">
+      <button class="tab-btn active" data-tab="medicos">Para profesionales</button>
+      <button class="tab-btn" data-tab="pacientes">Para pacientes</button>
+    </div>
+
+    <div class="features-panel active" id="tab-medicos">
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <h4>Panel clínico completo</h4>
+        <p>Visualizá la evolución de cada paciente con gráficos de tendencia, scores por escala y alertas automáticas.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 6h8M8 10h8M8 14h5"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg></div>
+        <h4>Escalas validadas integradas</h4>
+        <p>Epworth, Pittsburgh, ISI, STOP-Bang, Berlin y más. Aplicadas digitalmente, con scoring automático.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 010 5.5M21 20c0-2.5-1.5-4.6-3.5-5.5"/></svg></div>
+        <h4>Gestión de pacientes</h4>
+        <p>Vinculá pacientes a tu cuenta, revisá su historial completo y coordiná la atención desde cualquier dispositivo.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div>
+        <h4>Historial de consultas</h4>
+        <p>Registrá notas de cada sesión con acceso al estado del paciente en ese momento. Trazabilidad completa.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M6 9a6 6 0 1112 0c0 4 1.5 5 2 6H4c.5-1 2-2 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg></div>
+        <h4>Solicitud de estudios</h4>
+        <p>Pedile al paciente que complete una escala específica o prepare información antes de la próxima consulta.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 7l2-3h6l2 3h6a1 1 0 011 1v11a2 2 0 01-2 2H4a2 2 0 01-2-2V8a1 1 0 011-1z"/></svg></div>
+        <h4>Directorio profesional</h4>
+        <p>Listá tu práctica en el directorio de Dormetria y recibí pacientes que buscan especialistas en sueño.</p>
+      </div>
+    </div>
+
+    <div class="features-panel" id="tab-pacientes">
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></div>
+        <h4>Diario de sueño diario</h4>
+        <p>Registrá hora de acostarse, latencia, despertares, hora de levantarse y calidad subjetiva. En menos de 2 minutos.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
+        <h4>App móvil intuitiva</h4>
+        <p>Disponible para iOS y Android. Diseñada para ser fácil de usar, incluso para adultos mayores.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 17l5-5 4 4 8-8M21 8h-4M21 8v4"/></svg></div>
+        <h4>Actograma y métricas</h4>
+        <p>Visualizá tus horarios noche a noche, con latencia, despertares, eficiencia y regularidad calculadas automáticamente.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
+        <h4>Privacidad garantizada</h4>
+        <p>Tus datos son tuyos. Solo el profesional que vos vinculás tiene acceso. Nunca se comparten con terceros.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 5a2 2 0 012-2h6v16H6a2 2 0 00-2 2V5z"/><path d="M20 5a2 2 0 00-2-2h-6v16h6a2 2 0 012 2V5z"/></svg></div>
+        <h4>Biblioteca de higiene del sueño</h4>
+        <p>Artículos breves y validados clínicamente sobre luz, temperatura, cafeína, alcohol y más — personalizados por cronótipo.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M6 9a6 6 0 1112 0c0 4 1.5 5 2 6H4c.5-1 2-2 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg></div>
+        <h4>Recordatorios inteligentes</h4>
+        <p>Notificaciones personalizadas para completar el diario, las escalas o preparar información para tu próxima consulta.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PACIENTES -->
+<section class="pacientes only-patient" id="pacientes">
+  <div class="pac-wrap">
+    <p class="label-seccion" style="color:var(--verde-med)">Para quien quiere medir su sueño</p>
+    <h2 style="color:var(--texto)">Con tu profesional<br>o por tu cuenta.</h2>
+    <div class="pac-grid">
+      <div class="pac-steps">
+        <div class="pac-step">
+          <div class="pac-step-num">1</div>
+          <p><strong>Creá tu usuario.</strong> Solo necesitás un correo electrónico. No hay que descargar nada de ninguna tienda de aplicaciones.</p>
+        </div>
+        <div class="pac-step">
+          <div class="pac-step-num">2</div>
+          <p><strong>Instalá la app en tu teléfono.</strong> Desde el inicio te guiamos para agregarla a tu pantalla, así la abrís con un ícono y recibís recordatorios.</p>
+        </div>
+        <div class="pac-step">
+          <div class="pac-step-num">3</div>
+          <p><strong>Registrá tu noche cada mañana.</strong> Te lleva un minuto. Con eso tu profesional ve tu evolución real entre consulta y consulta.</p>
+        </div>
+        <div class="pac-step">
+          <div class="pac-step-num">4</div>
+          <p><strong>Si tenés profesional, compartile tu código.</strong> La app te genera un código personal de 6 caracteres — hay un botón para enviarlo por WhatsApp. Si todavía no tenés, podés usar la app igual y buscar uno en el directorio.</p>
+        </div>
+      </div>
+
+<div style="display:flex;justify-content:center">
+  <div class="dmo-phone"><div class="dmo-screen">
+    <div class="dmo-track" style="animation:dmoC3 12s infinite">
+
+      <div class="dmo-pane">
+        <div class="dmo-lbl">Buenas noches</div>
+        <div style="font-size:15px;margin:3px 0 11px">Ada Lovelace</div>
+        <div class="dmo-card" style="background:#C8A96E;color:#0F2820;margin-bottom:8px">
+          <div style="font-size:8.5px;font-weight:500;letter-spacing:.06em">DIARIO · ACCIÓN DEL DÍA</div>
+          <div style="font-size:12.5px;margin-top:3px">Registrá tu noche de ayer</div>
+          <div style="font-size:9px;margin-top:2px;opacity:.75">Te lleva un minuto</div>
+        </div>
+        <div class="dmo-card">
+          <div class="dmo-lbl" style="color:#7ec8a4">Escala del día</div>
+          <div style="font-size:11px;margin-top:3px">Insomnio (ISI)</div>
+          <div style="font-size:8.5px;color:rgba(244,239,229,.5);margin-top:2px">Reevaluación · hace 32 días</div>
+        </div>
+        <div class="dmo-card">
+          <div class="dmo-lbl" style="color:#C8A96E">Tu profesional te acerca</div>
+          <div style="font-size:10.5px;margin-top:3px">Material educativo · 2 sin leer</div>
+        </div>
+        <div class="dmo-card" style="font-size:10.5px;color:rgba(244,239,229,.65)">🔑 Mi especialista</div>
+      </div>
+
+      <div class="dmo-pane">
+        <div style="font-size:12.5px;margin-bottom:10px">Diario de sueño</div>
+        <div style="display:flex;gap:6px;margin-bottom:7px">
+          <div class="dmo-card" style="flex:1;margin:0"><div class="dmo-lbl">Me acosté</div><div style="font-size:15px;margin-top:2px">23:40</div></div>
+          <div class="dmo-card" style="flex:1;margin:0"><div class="dmo-lbl">Tardé</div><div style="font-size:15px;margin-top:2px">22 m</div></div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:7px">
+          <div class="dmo-card" style="flex:1;margin:0"><div class="dmo-lbl">Me desperté</div><div style="font-size:15px;margin-top:2px">07:10</div></div>
+          <div class="dmo-card" style="flex:1;margin:0"><div class="dmo-lbl">Me levanté</div><div style="font-size:15px;margin-top:2px">07:35</div></div>
+        </div>
+        <div class="dmo-lbl" style="margin-bottom:4px">Calidad del sueño</div>
+        <div style="display:flex;gap:4px;margin-bottom:8px">
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 0;font-size:14px">😫</div>
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 0;font-size:14px">😕</div>
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 0;font-size:14px">😐</div>
+          <div style="flex:1;text-align:center;background:#7ec8a4;border-radius:8px;padding:6px 0;font-size:14px">🙂</div>
+          <div style="flex:1;text-align:center;background:rgba(255,255,255,.07);border-radius:8px;padding:6px 0;font-size:14px">😊</div>
+        </div>
+        <div style="display:flex;gap:5px;font-size:9px;color:rgba(244,239,229,.6);margin-bottom:9px">
+          <span style="background:rgba(255,255,255,.07);border-radius:7px;padding:5px 7px">🏃 45 min</span>
+          <span style="background:rgba(255,255,255,.07);border-radius:7px;padding:5px 7px">☕ 2</span>
+          <span style="background:rgba(255,255,255,.07);border-radius:7px;padding:5px 7px">📱 30 min</span>
+        </div>
+        <div style="background:#7ec8a4;color:#0F2820;border-radius:9px;text-align:center;padding:8px;font-size:11px;font-weight:500">Guardar registro</div>
+      </div>
+
+      <div class="dmo-pane" style="background:#fff;color:#1a1a1a;padding:12px">
+        <div style="display:flex;gap:5px;margin-bottom:8px">
+          <span style="background:#e8f0eb;color:#1a4a3a;border-radius:14px;padding:3px 10px;font-size:9px;font-weight:500">7 días</span>
+          <span style="background:#1a4a3a;color:#fff;border-radius:14px;padding:3px 10px;font-size:9px;font-weight:500">30 días</span>
+        </div>
+        <div style="background:#eef8f5;border-radius:12px;padding:11px;text-align:center;margin-bottom:8px">
+          <div style="font-size:7.5px;color:#1a4a3a;letter-spacing:.1em;font-weight:600">SCORE DE SUEÑO</div>
+          <div style="font-size:34px;color:#1a4a3a;line-height:1.05;font-weight:300">71</div>
+          <div style="font-size:11px;color:#1a4a3a;font-weight:500">Bueno</div>
+          <div style="font-size:8px;color:#77776e;margin-top:4px">Basado en 28 noches de registro</div>
+        </div>
+        <div style="display:flex;gap:6px;margin-bottom:8px">
+          <div style="flex:1;background:#f4f4f0;border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#1a4a3a;letter-spacing:.05em;font-weight:600">CANTIDAD</div><div style="font-size:15px;font-weight:700;color:#d97706">67<span style="font-size:9px">%</span></div></div>
+          <div style="flex:1;background:#f4f4f0;border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#0e7490;letter-spacing:.05em;font-weight:600">FRAGMENT.</div><div style="font-size:15px;font-weight:700;color:#2d9e6b">75<span style="font-size:9px">%</span></div></div>
+          <div style="flex:1;background:#f4f4f0;border-radius:9px;padding:7px 6px"><div style="font-size:7px;color:#e67e22;letter-spacing:.05em;font-weight:600">REGULAR.</div><div style="font-size:15px;font-weight:700;color:#2d9e6b">77<span style="font-size:9px">%</span></div></div>
+        </div>
+        <div style="background:#eef8f5;border-radius:10px;padding:8px 11px;font-size:9.5px;color:#1a4a3a;margin-bottom:8px;display:flex;justify-content:space-between;align-items:center">
+          <span>¿Cómo se calcula este score?</span><span style="opacity:.5">▾</span>
+        </div>
+        <div style="background:#F4EFE5;border-radius:10px;padding:9px 11px">
+          <div style="font-size:7.5px;color:#666;letter-spacing:.05em;font-weight:600">EVOLUCIÓN · 7 DÍAS VS 7 ANTERIORES</div>
+          <div style="display:flex;align-items:baseline;gap:8px;margin-top:5px">
+            <div style="font-size:15px;font-weight:600;color:#14532d">↗ +6 pts</div>
+            <div style="font-size:10px;color:#444">Mejorando</div>
+          </div>
+          <div style="font-size:8.5px;color:#666;margin-top:3px">Esta semana: <b>71</b> · Anterior: <b>65</b></div>
+        </div>
+      </div>
+
+    </div>
+  </div></div>
+</div>
+<p class="dmo-caption">Así se ve la app del paciente: registrar la noche, ver su score y su evolución.</p>
+      <div class="pac-card">
+        <h3>Empezá a registrar tu sueño</h3>
+        <p>Diario de sueño, escalas clínicas validadas y tus gráficos de evolución, en tu navegador. Durante la beta, el acceso es sin costo.</p>
+        <a href="https://app.dormetria.com" class="btn-pac">
+          Creá tu usuario
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <div class="pac-note">¿Ya tenés cuenta? <a href="https://app.dormetria.com" style="color:var(--verde-med)">Ingresá acá</a></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="only-pro" style="padding:0 5vw 5rem;background:var(--crema)">
+<div style="max-width:1000px;margin:0 auto">
+<div style="display:flex;justify-content:center">
+  <div class="dmo-laptop">
+    <div class="dmo-lscreen" style="display:grid;grid-template-columns:200px 1fr;min-height:330px">
+
+      <div style="background:#0f2820;padding:11px 10px;border-right:1px solid rgba(255,255,255,.07)">
+        <div style="font-size:8.5px;color:rgba(244,239,229,.45);letter-spacing:.07em;margin-bottom:7px">ACTIVOS (24)</div>
+        <div style="display:flex;flex-wrap:wrap;gap:3px;margin-bottom:9px">
+          <span class="dmo-tag" style="border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.6)">Todas</span>
+          <span class="dmo-tag" style="border:1px solid #3b82f6;color:#3b82f6">SAHOS</span>
+          <span class="dmo-tag" style="border:1px solid #ef4444;color:#ef4444">Insomnio</span>
+          <span class="dmo-tag" style="border:1px solid #a855f7;color:#a855f7">SPI</span>
+        </div>
+        <div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#ef4444"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Lovelace, Ada</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#ef4444;color:#ffffff">Insomnio</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">36 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hoy</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#3b82f6"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Quijano, Alonso</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#3b82f6;color:#ffffff">SAHOS</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">58 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">ayer</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#a855f7"></span><span style="display:block;width:3px;height:100%;background:#ef4444"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Curie, Marie</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#a855f7;color:#ffffff">SPI</span><span class="dmo-tag" style="background:#ef4444;color:#ffffff">Insomnio</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">44 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 2 días</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#22c55e"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Da Vinci, Leonardo</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#22c55e;color:#052e13">Cronodisrupción</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">51 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 3 días</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#eab308"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Pan, Peter</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#eab308;color:#3a2c00">Parasomnia</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">9 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 3 días</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#f97316"></span><span style="display:block;width:3px;height:100%;background:#22c55e"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Holmes, Sherlock</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#f97316;color:#ffffff">Narcolepsia</span><span class="dmo-tag" style="background:#22c55e;color:#052e13">Cronodisrupción</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">40 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 5 días</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#ef4444"></span><span style="display:block;width:3px;height:100%;background:#eab308"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Frankenstein, Victor</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#ef4444;color:#ffffff">Insomnio</span><span class="dmo-tag" style="background:#eab308;color:#3a2c00">Parasomnia</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">33 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 6 días</div></div></div><div class="dmo-row"><div style="display:flex;height:30px;flex-shrink:0"><span style="display:block;width:3px;height:100%;background:#22c55e"></span></div><div style="flex:1;min-width:0"><div style="font-size:11px;color:#F4EFE5">Sawyer, Tom</div><div style="display:flex;gap:3px;margin-top:3px"><span class="dmo-tag" style="background:#22c55e;color:#052e13">Cronodisrupción</span></div></div><div style="text-align:right;flex-shrink:0"><div style="font-size:10.5px;color:rgba(244,239,229,.55);font-weight:500">11 a</div><div style="font-size:8px;color:rgba(244,239,229,.35);margin-top:2px">hace 8 días</div></div></div>
+      </div>
+
+      <div style="background:#fff;padding:12px 14px;color:#1a1a1a;position:relative;overflow:hidden">
+        <div style="display:flex;justify-content:space-between;align-items:baseline;border-bottom:.5px solid #e6e6e0;padding-bottom:7px;margin-bottom:9px">
+          <div><span style="font-size:12.5px;color:#1a4a3a">Ada Lovelace</span>
+            <span style="font-size:9px;color:#888;margin-left:6px">36 años · F · IMC 22.4</span></div>
+          <span class="dmo-tag" style="background:#ef4444;color:#fff">Insomnio</span>
+        </div>
+        <div style="font-size:8px;color:#666;letter-spacing:.07em;margin-bottom:5px">ACTOGRAMA — 14 NOCHES</div>
+        <div style="position:relative;overflow:hidden;margin-bottom:9px"><div id="dmoActo"></div>
+          <div style="position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(126,200,164,.3),transparent);animation:dmoSweep 3s infinite"></div>
+        </div>
+        <div style="display:flex;gap:14px">
+          <div style="flex:1">
+            <div style="font-size:8px;color:#666;letter-spacing:.07em;margin-bottom:4px">MÉTRICAS CLÍNICAS</div>
+            <div style="font-size:9px">
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">TST promedio</span><b>6 h 12 m</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">Latencia</span><b style="color:#b45309">38 min</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">Eficiencia</span><b style="color:#15803d">84 %</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:#666">Jet lag social</span><b style="color:#b45309">71 min</b></div>
+            </div>
+          </div>
+          <div style="flex:1">
+            <div style="font-size:8px;color:#666;letter-spacing:.07em;margin-bottom:4px">REGULARIDAD</div>
+            <div style="font-size:9px">
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">Score</span><b style="color:#1a4a3a">77 %</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">SD punto medio</span><b>43 min</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0;border-bottom:.5px solid #f0f0ec"><span style="color:#666">SRI (Phillips)</span><b>77</b></div>
+              <div style="display:flex;justify-content:space-between;padding:3px 0"><span style="color:#666">Noches &lt; 7 h</span><b style="color:#991b1b">54 %</b></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+<p class="dmo-caption">El panel del profesional: listado por patología, actograma y métricas de cada paciente.</p>
+</div>
+</section>
+
+<!-- BETA -->
+<section class="section-beta" id="beta">
+  <div class="beta-inner">
+    <div class="beta-texto reveal">
+      <p class="label-seccion">Beta abierta</p>
+      <h2>Sé parte desde<br>el principio.</h2>
+      <p>Estamos abriendo Dormetria a un grupo reducido de profesionales de la salud para iterar junto a quienes la van a usar. Si no sos profesional, no necesitás esperar: podés <a href="https://app.dormetria.com" style="color:var(--menta);text-decoration:underline">entrar a la app</a> y empezar a registrar tu sueño.</p>
+      <p>Como beta tester tenés acceso completo, sin costo, y tu feedback va a dar forma a la plataforma definitiva.</p>
+      <ul class="beta-lista">
+        <li>Acceso completo a todas las funcionalidades</li>
+        <li>Sin costo durante el período beta</li>
+        <li>Soporte directo del equipo de Dormetria</li>
+        <li>Influencia real en el desarrollo del producto</li>
+        <li>Condiciones preferenciales al lanzamiento oficial</li>
+      </ul>
+    </div>
+    <div class="beta-form reveal">
+      <div id="form-wrapper">
+        <h3>Quiero ser beta tester</h3>
+        <p class="form-sub">Solo para profesionales de la salud. Te contactamos en 48hs.</p>
+        <div class="form-row">
+          <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" id="inp-nombre" placeholder="Tu nombre">
+          </div>
+          <div class="form-group">
+            <label>Apellido</label>
+            <input type="text" id="inp-apellido" placeholder="Tu apellido">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Email profesional</label>
+          <input type="email" id="inp-email" placeholder="tu@email.com">
+        </div>
+        <div class="form-group">
+          <label>Especialidad</label>
+          <select id="inp-especialidad">
+            <option value="" disabled selected>Seleccioná tu especialidad</option>
+            <option>Psiquiatría</option>
+            <option>Psicología</option>
+            <option>Neurología</option>
+            <option>Otorrinolaringología</option>
+            <option>Neumonología / Neumología</option>
+            <option>Cardiología</option>
+            <option>Clínica Médica / Medicina Interna</option>
+            <option>Fonoaudiología</option>
+            <option>Terapia Ocupacional</option>
+            <option>Pediatría</option>
+            <option>Medicina del Sueño</option>
+            <option>Otra especialidad</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>País</label>
+          <select id="inp-pais">
+            <option value="" disabled selected>¿Desde dónde ejercés?</option>
+            <option>Argentina</option>
+            <option>México</option>
+            <option>Colombia</option>
+            <option>Chile</option>
+            <option>España</option>
+            <option>Uruguay</option>
+            <option>Perú</option>
+            <option>Otro</option>
+          </select>
+        </div>
+        <button class="btn-form" id="btn-enviar">Solicitar acceso beta →</button>
+        <p class="form-disclaimer">Al registrarte aceptás que te contactemos por email. Sin spam, sin terceros.</p>
+      </div>
+      <div class="success-msg" id="success-msg">
+        <div class="success-icon">✓</div>
+        <h4>¡Recibimos tu solicitud!</h4>
+        <p>Te vamos a contactar a la brevedad para darte acceso a la beta de Dormetria.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-marca">
+      <a href="#" class="logo" style="display:inline-flex;align-items:center"><svg viewBox="36 33 635 126" height="24" fill="currentColor" style="display:block" aria-label="Dormetria"><path d="M145 74 L 139 76 L 142 75 L 152 75 L 159 77 L 166 81 L 175 90 L 180 99 L 182 106 L 182 121 L 181 122 L 181 125 L 175 137 L 163 148 L 156 151 L 153 151 L 152 152 L 138 152 L 130 149 L 123 144 L 132 151 L 141 155 L 145 155 L 146 156 L 161 156 L 174 151 L 180 147 L 188 138 L 194 125 L 195 109 L 190 94 L 186 88 L 177 80 L 163 74 L 156 74 L 155 73 Z" fill-rule="evenodd"/><path d="M104 34 L 94 36 L 84 40 L 85 42 L 88 42 L 92 47 L 92 83 L 90 84 L 87 80 L 79 75 L 76 75 L 75 74 L 63 74 L 62 75 L 59 75 L 50 80 L 45 85 L 39 95 L 37 101 L 37 105 L 36 106 L 36 124 L 37 125 L 38 133 L 43 143 L 51 151 L 58 155 L 61 155 L 62 156 L 73 156 L 74 155 L 77 155 L 83 152 L 88 147 L 91 142 L 93 143 L 94 155 L 95 156 L 102 153 L 112 151 L 111 148 L 109 148 L 106 146 L 104 140 Z M70 79 L 74 79 L 82 82 L 89 90 L 92 100 L 92 129 L 91 130 L 91 133 L 88 140 L 81 147 L 76 149 L 68 149 L 61 146 L 54 139 L 51 133 L 50 125 L 49 124 L 49 104 L 50 103 L 51 96 L 56 87 L 60 83 L 65 80 L 69 80 Z" fill-rule="evenodd"/><path d="M248 74 L 238 75 L 232 79 L 226 89 L 224 88 L 224 75 L 223 74 L 205 80 L 205 82 L 208 82 L 212 86 L 212 147 L 210 150 L 204 152 L 205 154 L 234 154 L 234 152 L 229 151 L 226 149 L 224 143 L 224 108 L 225 107 L 225 102 L 229 91 L 234 86 L 236 85 L 244 85 L 250 88 L 251 83 L 254 77 Z" fill-rule="evenodd"/><path d="M260 79 L 260 82 L 263 82 L 267 86 L 267 90 L 268 91 L 268 142 L 267 143 L 267 148 L 264 151 L 260 152 L 260 154 L 288 154 L 288 152 L 284 151 L 280 147 L 280 101 L 286 88 L 290 84 L 294 82 L 305 82 L 307 83 L 312 88 L 315 97 L 315 146 L 311 151 L 307 153 L 308 154 L 335 154 L 335 152 L 331 151 L 329 149 L 327 142 L 327 104 L 328 103 L 328 99 L 330 93 L 333 88 L 336 85 L 342 82 L 352 82 L 357 85 L 361 91 L 362 99 L 363 100 L 363 143 L 361 149 L 359 151 L 355 152 L 355 154 L 383 154 L 383 152 L 379 151 L 375 146 L 375 100 L 374 99 L 374 93 L 371 84 L 369 81 L 364 77 L 357 74 L 346 74 L 340 76 L 331 84 L 327 91 L 325 90 L 325 88 L 322 82 L 318 78 L 313 75 L 310 75 L 309 74 L 298 74 L 288 79 L 281 88 L 279 87 L 279 74 L 267 78 Z" fill-rule="evenodd"/><path d="M418 74 L 406 79 L 396 90 L 391 102 L 391 106 L 390 107 L 390 124 L 391 125 L 391 129 L 393 135 L 399 145 L 409 153 L 411 153 L 414 155 L 417 155 L 418 156 L 431 156 L 432 155 L 435 155 L 444 150 L 451 142 L 454 137 L 455 132 L 452 131 L 449 137 L 439 145 L 432 147 L 426 147 L 419 145 L 413 141 L 408 135 L 403 123 L 402 111 L 403 110 L 455 110 L 455 101 L 454 100 L 453 93 L 450 87 L 444 80 L 435 75 L 432 75 L 431 74 Z M403 98 L 407 88 L 411 83 L 417 79 L 426 78 L 432 80 L 438 86 L 441 92 L 443 104 L 442 105 L 404 105 L 403 104 Z" fill-rule="evenodd"/><path d="M481 53 L 479 55 L 479 59 L 475 68 L 470 73 L 464 76 L 461 76 L 461 80 L 470 80 L 472 82 L 472 144 L 476 152 L 484 156 L 493 156 L 499 153 L 505 147 L 505 145 L 504 144 L 499 148 L 496 149 L 490 149 L 488 148 L 484 143 L 484 140 L 483 139 L 483 81 L 484 80 L 504 80 L 504 76 L 485 76 L 483 74 L 483 53 Z" fill-rule="evenodd"/><path d="M554 74 L 546 78 L 539 88 L 537 87 L 536 84 L 536 74 L 517 80 L 517 82 L 522 83 L 525 87 L 525 147 L 523 150 L 518 152 L 518 154 L 546 154 L 546 152 L 543 152 L 538 148 L 538 140 L 537 139 L 537 110 L 538 109 L 539 98 L 542 91 L 546 87 L 554 84 Z" fill-rule="evenodd"/><path d="M582 74 L 562 80 L 562 82 L 567 83 L 570 88 L 570 144 L 569 145 L 569 148 L 566 151 L 562 152 L 562 154 L 590 154 L 590 152 L 584 150 L 582 147 Z M580 43 L 575 46 L 573 50 L 573 54 L 574 57 L 577 60 L 584 61 L 588 59 L 590 56 L 590 49 L 586 44 Z" fill-rule="evenodd"/><path d="M613 79 L 610 81 L 606 86 L 603 93 L 603 96 L 614 99 L 615 91 L 619 83 L 624 79 L 633 78 L 640 81 L 644 86 L 646 92 L 646 101 L 643 105 L 637 108 L 617 114 L 609 118 L 602 125 L 599 135 L 600 136 L 600 142 L 603 148 L 610 154 L 616 156 L 628 156 L 636 153 L 641 149 L 644 144 L 646 143 L 647 144 L 647 148 L 651 154 L 655 156 L 662 156 L 666 154 L 670 149 L 669 148 L 662 149 L 659 146 L 659 140 L 658 139 L 658 112 L 659 111 L 658 110 L 658 93 L 655 85 L 652 81 L 647 77 L 637 74 L 626 74 Z M645 109 L 647 115 L 646 118 L 646 134 L 642 142 L 638 146 L 632 149 L 622 149 L 618 147 L 614 143 L 612 138 L 612 130 L 614 125 L 622 118 L 628 115 L 638 112 L 643 109 Z" fill-rule="evenodd"/></svg></a>
+      <p>Plataforma clínica del sueño</p>
+    </div>
+    <ul class="footer-links">
+      <li><a href="#como-funciona">Cómo funciona</a></li>
+      <li><a href="#para-medicos">Funcionalidades</a></li>
+      <li><a href="#beta">Beta</a></li>
+      <li><a href="#pacientes">Para pacientes</a></li>
+      <li><a href="https://app.dormetria.com">Entrar a la app</a></li>
+      <li><a href="mailto:hola@dormetria.com">Contacto</a></li>
+    </ul>
+    <p class="footer-copy">© 2026 Dormetria. Todos los derechos reservados.</p>
+  </div>
+</footer>
+
+<script>
+  // ── Tabs
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.features-panel').forEach(p => p.classList.remove('active'));
+      btn.classList.add('active');
+      document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
+    });
+  });
+
+  // ── Scroll reveal
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  // ── Entrada escalonada de las grillas (tarjetas que aparecen de a una)
+  const gridObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if (e.isIntersecting){ e.target.classList.add('dm-in'); gridObserver.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.features-panel, .steps, .pac-grid').forEach(el => gridObserver.observe(el));
+
+  // ── Nav: transparente arriba, solida al bajar
+  (function(){
+    const nv=document.querySelector('nav'); if(!nv) return;
+    const onScroll=function(){ nv.classList.toggle('dm-scrolled', window.scrollY > 24); };
+    window.addEventListener('scroll', onScroll, { passive:true });
+    onScroll();
+  })();
+
+  // Al cambiar de audiencia, las grillas recien mostradas deben animarse.
+  window.dmRefreshGrids = function(){
+    document.querySelectorAll('.features-panel, .steps, .pac-grid').forEach(function(el){
+      if(el.offsetParent!==null) el.classList.add('dm-in');
+    });
+  };
+
+  // ── Configuración
+  const SUPABASE_URL  = 'https://sojvsbwpqdwjuvezdhby.supabase.co';
+  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvanZzYndwcWR3anV2ZXpkaGJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MzA2MjcsImV4cCI6MjA5MzEwNjYyN30.WiERGJ6PYcKGxQ5jgVGJ2U_t0cvviam2dYvqt9_GoA8';
+  // La clave de Resend YA NO vive aca: cualquiera podia verla con "ver codigo"
+  // fuente y mandar mails en tu nombre. Ahora la guarda Netlify como variable
+  // de entorno y solo la usa la funcion del servidor (netlify/functions/notify-beta).
+  const NOTIFY_EMAIL  = 'diezjoaquinjose@gmail.com';
+
+  // ── Form
+  document.getElementById('btn-enviar').addEventListener('click', async () => {
+    const nombre      = document.getElementById('inp-nombre').value.trim();
+    const apellido    = document.getElementById('inp-apellido').value.trim();
+    const email       = document.getElementById('inp-email').value.trim();
+    const especialidad= document.getElementById('inp-especialidad').value;
+    const pais        = document.getElementById('inp-pais').value;
+
+    if (!nombre || !email || !especialidad) {
+      alert('Por favor completá al menos nombre, email y especialidad.');
+      return;
+    }
+
+    const btn = document.getElementById('btn-enviar');
+    btn.textContent = 'Enviando...';
+    btn.disabled = true;
+
+    try {
+      // 1. Guardar en Supabase
+      const sbRes = await fetch(`${SUPABASE_URL}/rest/v1/beta_registros`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'apikey': SUPABASE_KEY,
+          'Authorization': `Bearer ${SUPABASE_KEY}`,
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify({ nombre, apellido, email, especialidad, pais })
+      });
+
+      if (!sbRes.ok) throw new Error('Error al guardar en base de datos');
+
+      // 2. Notificar por mail desde el servidor (la clave nunca llega al navegador)
+      try{
+        await fetch('/.netlify/functions/notify-beta', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, apellido, email, especialidad, pais })
+        });
+      }catch(_){ /* el registro ya quedo guardado; el mail es secundario */ }
+
+      // 3. Mostrar éxito
+      document.getElementById('form-wrapper').style.display = 'none';
+      document.getElementById('success-msg').style.display  = 'block';
+
+    } catch (err) {
+      console.error(err);
+      btn.textContent = 'Solicitar acceso beta →';
+      btn.disabled = false;
+      alert('Hubo un problema al enviar. Por favor intentá de nuevo.');
+    }
+  });
+</script>
+
+<script>
+// Selector de audiencia: filtra la landing por publico, NO redirige a la app.
+function dmApplyAudience(kind){
+  document.body.classList.remove('aud-pro','aud-patient');
+  if(kind==='pro') document.body.classList.add('aud-pro');
+  else if(kind==='patient') document.body.classList.add('aud-patient');
+  // Estado activo del toggle del nav
+  document.querySelectorAll('.aud-switch button').forEach(function(b){
+    b.classList.toggle('on', b.getAttribute('data-aud')===kind);
+  });
+}
+function dmChooseAudience(kind){
+  try{ localStorage.setItem('dm_audience', kind); }catch(_){}
+  var ov=document.getElementById('dm-audience'); if(ov) ov.classList.remove('on');
+  document.body.style.overflow='';
+  dmApplyAudience(kind);
+  setTimeout(function(){ try{ if(window.dmRefreshGrids) window.dmRefreshGrids(); }catch(_){} }, 120);
+  // Llevar al inicio de la landing ya filtrada.
+  try{ window.scrollTo({top:0, behavior:'smooth'}); }catch(_){ window.scrollTo(0,0); }
+}
+(function(){
+  try{
+    var saved=localStorage.getItem('dm_audience');
+    if(saved){
+      // Ya eligio antes: aplicar su vista sin mostrar el overlay.
+      if(saved==='pro'||saved==='patient') dmApplyAudience(saved);
+    }else{
+      var ov=document.getElementById('dm-audience');
+      if(ov){ setTimeout(function(){ ov.classList.add('on'); document.body.style.overflow='hidden'; }, 400); }
+    }
+  }catch(_){}
+})();
+(function(){
+  var hh=document.getElementById('heroActo');
+  if(hh){
+    function rr(s){var x=Math.sin(s)*10000;return x-Math.floor(x);}
+    var o='';
+    for(var k=0;k<9;k++){
+      var st=40+rr(k*7+1)*8, w=26+rr(k*3+2)*9;
+      o+='<div style="height:9px;position:relative;margin-bottom:3px;background:rgba(255,255,255,0.05);border-radius:2px">'
+        +'<div style="position:absolute;left:'+st+'%;width:'+w+'%;top:0;height:100%;background:#7ec8a4;border-radius:2px"></div>'
+        +'<div style="position:absolute;left:50%;top:0;bottom:0;width:1px;background:rgba(255,255,255,0.15)"></div></div>';
+    }
+    hh.innerHTML=o;
+  }
+  var host=document.getElementById('dmoActo'); if(!host) return;
+  function r(s){var x=Math.sin(s)*10000;return x-Math.floor(x);}
+  var out='';
+  for(var i=0;i<14;i++){
+    var st=36+r(i*7+1)*9, lat=2.5+r(i*5)*3.5, w=24+r(i*3+2)*10;
+    var wk=r(i*11)>0.55, free=(i%7===5||i%7===6);
+    out+='<div style="display:flex;align-items:center;height:11px">'
+      +'<span style="width:30px;font-size:6.5px;color:#aaa">'+String(i+1).padStart(2,'0')+'-07</span>'
+      +'<div style="flex:1;position:relative;height:6px;background:'+(free?'#eef0fa':'#f5f5f1')+';border-radius:2px">'
+      +'<div style="position:absolute;left:'+st+'%;width:'+lat+'%;top:0;height:100%;background:#c9d8d2;border-radius:2px 0 0 2px"></div>'
+      +'<div style="position:absolute;left:'+(st+lat)+'%;width:'+w+'%;top:0;height:100%;background:#1a4a3a;border-radius:0 2px 2px 0"></div>'
+      +(wk?'<div style="position:absolute;left:'+(st+lat+w*0.55)+'%;width:1.6%;top:0;height:100%;background:#fff;border-top:1px solid #ea580c;border-bottom:1px solid #ea580c"></div>':'')
+      +'<div style="position:absolute;left:'+(st-4)+'%;width:3.5%;top:2px;height:2px;background:#7c3aed"></div>'
+      +'<div style="position:absolute;left:50%;top:-2px;bottom:-2px;width:1px;background:#ddd"></div>'
+      +'</div></div>';
+  }
+  host.innerHTML=out;
+})();
+</script>
+</body>
+</html>
