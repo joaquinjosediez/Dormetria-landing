@@ -755,12 +755,36 @@
     .hero-stats { flex-direction: column; gap: 1.5rem; }
     .features-tabs { flex-wrap: wrap; }
   }
-  /* La demo tipo notebook del profesional se apila en móvil (antes se
-     comprimía y quedaba ilegible). */
-  @media (max-width: 760px){
-    .dmo-laptop{ max-width:100% !important; }
-    .dmo-laptop .dmo-lscreen{ grid-template-columns:1fr !important; }
-    .dmo-laptop .dmo-lscreen > div:last-child{ display:none; }
+  /* ── La demo del profesional CONSERVA la forma de notebook en movil ──
+     Antes la apilaba en una columna y parecia un telefono, que es justo lo
+     contrario de lo que tiene que comunicar (el panel es de escritorio).
+     Ahora se mantiene el ancho de diseno de 560px y se escala completa,
+     como si fuera una foto de la pantalla real. */
+  .dmo-laptop-fit{ width:100%; display:flex; justify-content:center; }
+  @media (max-width: 620px){
+    .dmo-laptop-fit{
+      /* Alto reservado = alto real x escala, para que no quede hueco debajo. */
+      height:calc(var(--lap-h, 430px) * var(--lap-s, .62));
+      overflow:visible;
+    }
+    .dmo-laptop-fit > .dmo-laptop{
+      transform: scale(var(--lap-s, .62));
+      transform-origin: top center;
+      flex-shrink:0;
+    }
+  }
+  @media (max-width: 620px){ .dmo-laptop-fit{ --lap-s:.62; } }
+  @media (max-width: 480px){ .dmo-laptop-fit{ --lap-s:.5; } }
+  @media (max-width: 380px){ .dmo-laptop-fit{ --lap-s:.42; } }
+  /* Pie de la notebook: le da la silueta de computadora, no de tarjeta. */
+  .dmo-laptop-base{
+    width:64%; max-width:360px; height:9px; margin:0 auto;
+    background:#0b1f18; border-radius:0 0 10px 10px;
+    box-shadow:0 8px 18px rgba(0,0,0,.22);
+  }
+  .dmo-laptop-base::after{
+    content:''; display:block; width:52px; height:3px; margin:3px auto 0;
+    background:rgba(255,255,255,.16); border-radius:2px;
   }
 
   /* ─── Selector de audiencia (primera visita) ─── */
@@ -809,12 +833,32 @@
   .aud-switch button{ font-size:.9rem; font-weight:500; padding:9px 20px; }
   .aud-switch button.on{ box-shadow:0 2px 8px rgba(26,74,58,.28); }
   @media (max-width:900px){
-    /* En movil el nav se colapsa, pero el interruptor tiene que sobrevivir. */
-    .nav-links{ display:flex !important; gap:0; }
+    /* En movil el nav se colapsa, pero el interruptor tiene que sobrevivir.
+       Antes los tres elementos peleaban por el mismo ancho y se superponian:
+       ahora el logo se achica, el boton "Entrar a la app" baja a una fila
+       propia y el interruptor se queda con el espacio que necesita. */
+    nav{
+      flex-wrap:wrap; row-gap:.6rem;
+      padding-left:4vw; padding-right:4vw;
+    }
+    .nav-logo svg{ height:20px; }
+    .nav-links{ display:flex !important; gap:0; order:3; width:100%; justify-content:center; }
     .nav-links li:not(.aud-switch-li):not(:last-child){ display:none; }
     .aud-switch-lbl{ display:none; }
-    .aud-switch button{ font-size:.82rem; padding:8px 14px; }
-    .nav-cta{ font-size:.82rem; padding:8px 14px; }
+    .aud-switch{ box-shadow:none; }
+    .aud-switch button{ font-size:.85rem; padding:8px 18px; }
+    .nav-links li:last-child{ margin-left:auto; }
+    .nav-cta{ font-size:.8rem; padding:8px 14px; white-space:nowrap; }
+  }
+  /* La nav de movil ahora ocupa 2-3 filas: el hero necesita mas aire arriba
+     para no quedar tapado. */
+  @media (max-width:900px){ .hero{ padding-top: 12.5rem; } }
+  @media (max-width:520px){ .hero{ padding-top: 15rem; } }
+  @media (max-width:520px){
+    .nav-links{ flex-wrap:wrap; row-gap:.5rem; }
+    .nav-links li.aud-switch-li{ width:100%; display:flex; justify-content:center; }
+    .nav-links li:last-child{ margin-left:0; width:100%; display:flex; justify-content:center; }
+    .nav-cta{ width:100%; text-align:center; justify-content:center; }
   }
   /* Cinta de contexto arriba de todo, dice a quién le hablamos */
   .aud-ribbon{ display:none; text-align:center; font-size:.8rem; padding:7px 16px; background:var(--menta-suave); color:var(--verde); }
@@ -1512,6 +1556,8 @@
 <section class="only-pro" style="padding:0 5vw 5rem;background:var(--crema)">
 <div style="max-width:1000px;margin:0 auto">
 <div style="display:flex;justify-content:center">
+  <div class="dmo-laptop-fit">
+  <div>
   <div class="dmo-laptop">
     <div class="dmo-lscreen" style="display:grid;grid-template-columns:200px 1fr;min-height:330px">
 
@@ -1560,8 +1606,11 @@
 
     </div>
   </div>
+  <div class="dmo-laptop-base"></div>
+  </div>
+  </div>
 </div>
-<p class="dmo-caption">El panel del profesional: listado por patología, actograma y métricas de cada paciente.</p>
+<p class="dmo-caption">El panel del profesional en la computadora: listado por patología, ficha, actograma y métricas de cada paciente.</p>
 </div>
 </section>
 
