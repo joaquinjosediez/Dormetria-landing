@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" defer crossorigin="anonymous" onerror="window._chartFailed=true"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer crossorigin="anonymous" onerror="console.warn('chartjs-adapter no cargó')"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3/dist/chartjs-plugin-annotation.min.js" defer crossorigin="anonymous"></script>
-<link rel="stylesheet" href="css/styles.css?v=hoy75-mod42">
+<link rel="stylesheet" href="css/styles.css?v=hoy75-mod43">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1306,7 +1306,7 @@
 
 <!-- Modularización (paso 1): helpers de métricas de sueño en archivo aparte.
      Debe cargar ANTES del script principal para que sus funciones existan. -->
-<script src="js/dormetria-sleep-metrics.js?v=hoy75-mod42"></script>
+<script src="js/dormetria-sleep-metrics.js?v=hoy75-mod43"></script>
 <script>
 
 // Detect file:// protocol - CDN scripts won't load, show helpful message
@@ -1325,7 +1325,7 @@ if(window.location.protocol === 'file:'){
 
 // v20260520-final
 const SU='https://sojvsbwpqdwjuvezdhby.supabase.co';
-const APP_VERSION='hoy75-mod42';
+const APP_VERSION='hoy75-mod43';
 // ─── PWA: registro del service worker e instalación ───
 // La app pasa a ser instalable (ícono propio, pantalla completa) y queda
 // preparada para recibir notificaciones push cuando exista el servidor.
@@ -4718,16 +4718,16 @@ const PATIENT_EDU_TOPICS=[
   {id:'higiene',icon:'🛏',title:'Higiene del sueño: 10 hábitos clave',body:`
     <p>La <strong>higiene del sueño</strong> es el conjunto de hábitos diurnos y de horario que favorecen un buen descanso. Sirve como base, aunque por sí sola no cura un trastorno establecido (no es un tratamiento de insomnio crónico).</p>
     <ol style="margin-top:10px;padding-left:18px;line-height:1.7">
-      <li><strong>Horarios regulares.</strong> Acostarse y levantarse a la misma hora todos los días, incluso los fines de semana. Variar más de 1 h desorganiza el ritmo circadiano.</li>
-      <li><strong>Luz natural por la mañana.</strong> 10–15 min de luz al aire libre en la primera hora luego de despertar refuerza el reloj biológico.</li>
+      <li><strong>Intentar mantener horarios regulares.</strong> Acostarse y levantarse a la misma hora todos los días, incluso los fines de semana. Variar más de 1 h desorganiza el ritmo circadiano.</li>
+      <li><strong>Es buena la luz natural por la mañana.</strong> 10–15 min de luz al aire libre en la primera hora luego de despertar refuerza el reloj biológico.</li>
       <li><strong>Evitar cafeína después del mediodía.</strong> La vida media es de 5–6 h. Un café a las 16 h tiene aún la mitad activa a las 22 h.</li>
-      <li><strong>Limitar el alcohol.</strong> Sedante de inicio pero fragmenta el sueño en la segunda mitad de la noche.</li>
-      <li><strong>Cortar pantallas 30–60 min antes.</strong> La luz brillante de noche atrasa la liberación de melatonina.</li>
-      <li><strong>Habitación fresca, oscura y silenciosa.</strong> 18–20 °C es lo recomendado.</li>
-      <li><strong>La cama solo para dormir (y sexo).</strong> Asociar la cama con vigilia activa la entrenamiento contrario al sueño.</li>
+      <li><strong>Limitar el alcohol.</strong> Sedante de inicio pero da un sueño de muy mala calidad, fragmentado, y bloquea el sueño REM.</li>
+      <li><strong>Cortar pantallas 30–60 min antes.</strong> La luz brillante de noche atrasa la liberación de melatonina, y además generan activación según el contenido.</li>
+      <li><strong>Buscá que tu habitación esté fresca, oscura y silenciosa.</strong> Encontrar una configuración de temperatura y oscuridad cómoda, y mantener la habitación bien ventilada.</li>
+      <li><strong>Usar la cama solo para dormir (y sexo).</strong> Asociar la cama con vigilia activa la configura para lo contrario al sueño.</li>
       <li><strong>No quedarse despierto/a en la cama más de 20 min.</strong> Si no podés dormir, levantate, hacé algo tranquilo con luz tenue, y volvé cuando tengas sueño.</li>
-      <li><strong>Ejercicio diurno, no nocturno.</strong> Mejora el sueño, pero idealmente antes de 3 h de acostarse.</li>
-      <li><strong>Cena liviana y temprana.</strong> Comidas pesadas o tarde dificultan el inicio del sueño.</li>
+      <li><strong>Es bueno hacer ejercicio, pero no nocturno.</strong> Mejora el sueño, pero idealmente antes de 3 h de acostarse.</li>
+      <li><strong>Buscar que la cena sea liviana y temprana.</strong> Comidas pesadas o tarde dificultan el inicio del sueño.</li>
     </ol>
     <p style="margin-top:14px;font-size:12.5px;color:rgba(255,255,255,0.6)"><em>Si pese a aplicar estos hábitos persisten dificultades por más de 3 meses, evaluar TCC-I.</em></p>
   `},
@@ -17680,7 +17680,14 @@ const CBTI_PATIENT_CONTENT = {
 // propone una ventana de sueño consolidada + la regla semanal de ajuste
 // (titración): eficiencia ≥90% amplía la ventana, <85% la recorta. Es el
 // mecanismo central de la restricción de sueño (SleepioRx / Spielman).
-function computeSleepWindow(entries){
+// anchorWake: hora fija de levantarse (minutos desde medianoche) acordada con
+// el paciente. Es como manda el protocolo clásico de restricción de sueño: se
+// ANCLA el despertar y se mueve solo la hora de acostarse. Promediar el
+// despertar real, como hacíamos antes, arrastra el ancla hacia el desorden que
+// justamente se quiere corregir. Si no se pasa ancla, se sugiere el despertar
+// más TEMPRANO habitual (percentil 25) en vez del promedio, que es un punto de
+// partida realista y no premia los días de mayor desfase.
+function computeSleepWindow(entries, anchorWake){
   const valid=(entries||[]).filter(e=>e.bedtime&&e.wake_time&&e.sleep_minutes&&e.sleep_minutes>=60&&!(e.notes&&String(e.notes).startsWith('Importado')));
   if(valid.length<5) return {error:'few_nights', n:valid.length};
   const last=valid.slice(0,14);
@@ -17690,10 +17697,18 @@ function computeSleepWindow(entries){
   const eff=avgTIB>0?Math.round(avgTST/avgTIB*100):0;
   // Ventana prescrita = tiempo dormido promedio, con piso de seguridad de 5h.
   const windowMin=Math.max(300, avgTST);
-  // Hora de despertar objetivo: el promedio real de las últimas noches.
   const wakeMins=last.map(e=>{const [wh,wm]=e.wake_time.split(':').map(Number);return wh*60+wm;});
   const avgWake=Math.round(wakeMins.reduce((a,b)=>a+b,0)/wakeMins.length);
-  const bedTarget=((avgWake - windowMin)%1440+1440)%1440;
+  // Sugerencia de ancla: percentil 25 de la hora de levantarse (el extremo
+  // temprano habitual), NO el promedio.
+  const ord=wakeMins.slice().sort((a,b)=>a-b);
+  const p25=ord[Math.max(0, Math.floor(ord.length*0.25)-0)] ?? ord[0];
+  const anchorSug=Math.round(p25);
+  const anchorUsed=(anchorWake!=null && !isNaN(anchorWake)) ? ((anchorWake%1440)+1440)%1440 : anchorSug;
+  const anchorFixed=(anchorWake!=null && !isNaN(anchorWake));
+  const avgWakeSD=Math.round(Math.sqrt(wakeMins.reduce((a,v)=>a+Math.pow(v-avgWake,2),0)/wakeMins.length));
+  const bedTarget=((anchorUsed - windowMin)%1440+1440)%1440;
+  const avgWake_legacy=avgWake;
   const fmt=m=>{const h=Math.floor(((m%1440)+1440)%1440/60), mm=Math.round(((m%1440)+1440)%1440%60);return String(h).padStart(2,'0')+':'+String(mm).padStart(2,'0');};
   const fmtDur=m=>{const h=Math.floor(m/60), mm=m%60;return (h>0?h+' h ':'')+String(mm).padStart(2,'0')+' m';};
   // Regla de titración semanal
@@ -17701,7 +17716,8 @@ function computeSleepWindow(entries){
   if(eff>=90) titr={dir:'+', txt:'Tu eficiencia es alta: la próxima semana podés adelantar la hora de acostarte 15 minutos.'};
   else if(eff<85) titr={dir:'-', txt:'Tu eficiencia está baja: mantené (o recortá 15 min) la ventana esta semana para consolidar el sueño.'};
   else titr={dir:'=', txt:'Buen punto de partida: sostené esta ventana una semana más antes de ampliarla.'};
-  return {n:last.length, avgTST, avgTIB, eff, windowMin, bedTarget, wakeTarget:avgWake,
+  return {n:last.length, avgTST, avgTIB, eff, windowMin, bedTarget,
+          wakeTarget:anchorUsed, anchorFixed, anchorSug, avgWake:avgWake_legacy, avgWakeSD,
           fmt, fmtDur, titr};
 }
 // ─── VENTANA DE SUEÑO (TCC-I) — cálculo compartido y ajuste profesional ───
@@ -17723,11 +17739,11 @@ function dmWindowDuration(bed, wake){
   let d = wake - bed; if(d<=0) d+=1440; return d;
 }
 // Trae el diario del paciente y calcula la ventana propuesta por el motor.
-async function dmComputeWindowFor(patientEmail){
+async function dmComputeWindowFor(patientEmail, anchorWake){
   try{
     const d = await db.get('sleep_diary?patient_email=eq.'+encodeURIComponent(patientEmail)+
       '&order=diary_date.desc&limit=30&select=bedtime,wake_time,sleep_minutes,notes,diary_date').catch(()=>[]);
-    return computeSleepWindow(d||[]);
+    return computeSleepWindow(d||[], anchorWake);
   }catch(e){ return {error:'load', n:0}; }
 }
 // Lee el ajuste guardado por el profesional. Si las columnas todavía no
@@ -17735,7 +17751,7 @@ async function dmComputeWindowFor(patientEmail){
 async function dmGetWindowOverride(patientEmail, doctorEmail){
   try{
     let q='cbti_patients?patient_email=ilike.'+encodeURIComponent(patientEmail)+
-          '&select=window_bed,window_wake,window_note,window_set_at,doctor_email';
+          '&select=window_bed,window_wake,window_note,window_set_at,window_anchor,doctor_email';
     if(doctorEmail) q+='&doctor_email=eq.'+encodeURIComponent(doctorEmail);
     const r=await db.get(q);
     if(!r||!r.length) return null;
@@ -17752,10 +17768,9 @@ async function renderCbtiWindowPanel(patientEmail){
   const box=document.getElementById('cbti-window-box');
   if(!box) return;
   const drEmail=S.user.email;
-  const [sw, ov] = await Promise.all([
-    dmComputeWindowFor(patientEmail),
-    dmGetWindowOverride(patientEmail, drEmail)
-  ]);
+  const ov0 = await dmGetWindowOverride(patientEmail, drEmail);
+  const sw  = await dmComputeWindowFor(patientEmail, ov0 && ov0.window_anchor!=null ? ov0.window_anchor : undefined);
+  const ov  = ov0;
   window._cbtiWin = {sw, ov, patientEmail};
   let html='<div style="background:rgba(126,200,164,0.06);border:1px solid rgba(200,169,110,0.35);border-radius:14px;padding:16px;margin-bottom:18px">'+
     '<div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:10px">Ventana de sueño · restricción</div>';
@@ -17769,9 +17784,24 @@ async function renderCbtiWindowPanel(patientEmail){
       '<div style="flex:1;min-width:88px;background:rgba(255,255,255,0.05);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:.05em">TIB PROMEDIO</div><div style="font-size:16px;font-weight:700;color:#fff">'+sw.fmtDur(sw.avgTIB)+'</div></div>'+
       '<div style="flex:1;min-width:88px;background:rgba(255,255,255,0.05);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:.05em">EFICIENCIA</div><div style="font-size:16px;font-weight:700;color:'+effCol+'">'+sw.eff+'%</div></div>'+
       '</div>'+
-      '<div style="font-size:12px;color:rgba(255,255,255,0.62);line-height:1.5;margin-bottom:12px;padding:9px 11px;background:rgba(255,255,255,0.04);border-radius:9px">'+
+      '<div style="font-size:12px;color:rgba(255,255,255,0.62);line-height:1.5;margin-bottom:10px;padding:9px 11px;background:rgba(255,255,255,0.04);border-radius:9px">'+
         '<strong style="color:#C8A96E">Propuesta del motor:</strong> '+sw.fmt(sw.bedTarget)+' → '+sw.fmt(sw.wakeTarget)+
-        ' ('+sw.fmtDur(sw.windowMin)+', sobre '+sw.n+' noches). '+sw.titr.txt+'</div>';
+        ' ('+sw.fmtDur(sw.windowMin)+', sobre '+sw.n+' noches). '+sw.titr.txt+'</div>'+
+      // Ancla de despertar: es la decisión clínica que ordena todo el protocolo.
+      '<div style="background:rgba(200,169,110,0.1);border:1px solid rgba(200,169,110,0.3);border-radius:10px;padding:10px 11px;margin-bottom:12px">'+
+        '<div style="font-size:10px;color:#C8A96E;letter-spacing:.07em;font-weight:700;margin-bottom:5px">ANCLA DE DESPERTAR</div>'+
+        '<div style="font-size:11.5px;color:rgba(255,255,255,0.68);line-height:1.5;margin-bottom:8px">'+
+          'La hora de levantarse se fija y NO se mueve; solo se ajusta la de acostarse. '+
+          (sw.anchorFixed
+            ? 'Ancla acordada: <strong style="color:#fff">'+sw.fmt(sw.wakeTarget)+'</strong>.'
+            : 'Sin ancla acordada todavía — se está usando <strong style="color:#fff">'+sw.fmt(sw.anchorSug)+'</strong> (su despertar habitual más temprano).')+
+          ' Su despertar real promedia '+sw.fmt(sw.avgWake)+' con una dispersión de '+sw.avgWakeSD+' min.</div>'+
+        '<div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">'+
+          '<div style="flex:1;min-width:120px"><label style="font-size:9.5px;color:rgba(255,255,255,0.5);display:block;margin-bottom:3px">HORA FIJA DE LEVANTARSE</label>'+
+          '<input id="cbti-win-anchor" type="time" value="'+dmMinsToHHMM(sw.wakeTarget)+'" onchange="applyCbtiAnchor()" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:9px;padding:9px;color:#fff;font-size:14px;font-family:var(--font)"></div>'+
+          '<button onclick="applyCbtiAnchor()" style="background:rgba(200,169,110,0.25);border:1px solid rgba(200,169,110,0.5);color:#fff;border-radius:9px;padding:10px 13px;font-size:12px;cursor:pointer;font-family:var(--font)">Recalcular ventana</button>'+
+        '</div>'+
+      '</div>';
   }
   const curBed  = ov&&ov.window_bed!=null  ? ov.window_bed  : (sw&&!sw.error? sw.bedTarget : 23*60);
   const curWake = ov&&ov.window_wake!=null ? ov.window_wake : (sw&&!sw.error? sw.wakeTarget: 7*60);
@@ -17809,6 +17839,20 @@ function previewCbtiWindow(){
   else { el.style.color='#7EC8A4'; }
   el.textContent=msg;
 }
+// Cambiar el ancla recalcula la ventana entera: la hora de acostarse se
+// deriva de (ancla − tiempo dormido promedio).
+async function applyCbtiAnchor(){
+  const st=window._cbtiWin||{};
+  const a=dmHHMMToMins(document.getElementById('cbti-win-anchor')?.value);
+  if(a==null) return;
+  const sw=await dmComputeWindowFor(st.patientEmail, a);
+  if(!sw||sw.error) return;
+  const b=document.getElementById('cbti-win-bed'), w=document.getElementById('cbti-win-wake');
+  if(b) b.value=dmMinsToHHMM(sw.bedTarget);
+  if(w) w.value=dmMinsToHHMM(sw.wakeTarget);
+  window._cbtiWin.sw=sw;
+  previewCbtiWindow();
+}
 function resetCbtiWindowToEngine(){
   const sw=(window._cbtiWin||{}).sw; if(!sw||sw.error) return;
   const b=document.getElementById('cbti-win-bed'), w=document.getElementById('cbti-win-wake');
@@ -17835,6 +17879,7 @@ async function saveCbtiWindow(){
                'Prefer':'resolution=merge-duplicates,return=minimal'},
       body:JSON.stringify({doctor_email:drEmail, patient_email:(patEmail||'').toLowerCase(), active:true,
                            window_bed:bed, window_wake:wake, window_note:note||null,
+                           window_anchor:dmHHMMToMins(document.getElementById('cbti-win-anchor')?.value),
                            window_set_at:new Date().toISOString()})
     }).then(async r=>{ if(!r.ok){ throw new Error(await r.text()); } });
     toast('Ventana guardada ✓');
@@ -17860,7 +17905,9 @@ async function openPatientCbtiView(){
       let sw=null;
       try{
         const _d = await db.get('sleep_diary?patient_email=eq.'+encodeURIComponent(patEmail)+'&order=diary_date.desc&limit=30&select=bedtime,wake_time,sleep_minutes,notes,diary_date').catch(()=>[]);
-        sw = computeSleepWindow(_d||[]);
+        let _anchor;
+        try{ const _o=await dmGetWindowOverride(patEmail,null); if(_o&&_o.window_anchor!=null) _anchor=_o.window_anchor; }catch(_){}
+        sw = computeSleepWindow(_d||[], _anchor);
       }catch(_){}
       let html='<div style="background:linear-gradient(135deg,rgba(126,200,164,0.14),rgba(200,169,110,0.08));border:1px solid rgba(200,169,110,0.4);border-radius:16px;padding:18px;margin-bottom:16px">'+
         '<div style="font-size:34px;margin-bottom:6px">🌿</div>'+
