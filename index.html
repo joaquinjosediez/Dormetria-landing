@@ -21,7 +21,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js" defer crossorigin="anonymous" onerror="window._chartFailed=true"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js" defer crossorigin="anonymous" onerror="console.warn('chartjs-adapter no cargó')"></script>
 <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-annotation@3/dist/chartjs-plugin-annotation.min.js" defer crossorigin="anonymous"></script>
-<link rel="stylesheet" href="css/styles.css?v=hoy75-mod40">
+<link rel="stylesheet" href="css/styles.css?v=hoy75-mod42">
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
@@ -1306,7 +1306,7 @@
 
 <!-- Modularización (paso 1): helpers de métricas de sueño en archivo aparte.
      Debe cargar ANTES del script principal para que sus funciones existan. -->
-<script src="js/dormetria-sleep-metrics.js?v=hoy75-mod40"></script>
+<script src="js/dormetria-sleep-metrics.js?v=hoy75-mod42"></script>
 <script>
 
 // Detect file:// protocol - CDN scripts won't load, show helpful message
@@ -1325,7 +1325,7 @@ if(window.location.protocol === 'file:'){
 
 // v20260520-final
 const SU='https://sojvsbwpqdwjuvezdhby.supabase.co';
-const APP_VERSION='hoy75-mod40';
+const APP_VERSION='hoy75-mod42';
 // ─── PWA: registro del service worker e instalación ───
 // La app pasa a ser instalable (ícono propio, pantalla completa) y queda
 // preparada para recibir notificaciones push cuando exista el servidor.
@@ -4357,6 +4357,115 @@ function updateClinicalMetrics(entries){
 // HTML reutilizable de métricas (paciente y médico).
 // audience: 'patient' (default) muestra métricas clínicas básicas + variación amigable.
 //           'doctor' agrega bloque técnico con SD, SRI y CPD.
+// ─── IMPACTO DE HÁBITOS SOBRE EL SUEÑO ───────────────────────────────────
+// Compara las noches CON el hábito contra las noches SIN él, sobre las mismas
+// variables del diario. Es una asociación observacional dentro del propio
+// paciente, no un ensayo: sirve para generar hipótesis en consulta, no para
+// concluir causalidad. Por eso exigimos un mínimo de noches en AMBOS grupos y
+// mostramos siempre la n.
+function computeHabitsImpact(entries){
+  const E=(entries||[]).filter(e=>e && e.sleep_minutes>0 &&
+    !(e.notes && String(e.notes).startsWith('Importado')));
+  if(E.length < 10) return {error:'few_nights', n:E.length};
+
+  // Un hábito solo se analiza si el paciente REALMENTE lo registra: tiene que
+  // haber valores no nulos en al menos 8 noches. Si nunca lo marcó, no
+  // inventamos una conclusión sobre datos ausentes.
+  const habitos=[
+    { id:'exercise', label:'Actividad física', icon:'🏃',
+      has:e=>e.exercise_mins!=null, on:e=>Number(e.exercise_mins)>0,
+      onTxt:'con actividad', offTxt:'sin actividad' },
+    { id:'caffeine', label:'Cafeína', icon:'☕',
+      has:e=>e.coffee_cups!=null, on:e=>Number(e.coffee_cups)>0,
+      onTxt:'con cafeína', offTxt:'sin cafeína' },
+    { id:'alcohol', label:'Alcohol', icon:'🍷',
+      has:e=>e.alcohol_drinks!=null, on:e=>Number(e.alcohol_drinks)>0,
+      onTxt:'con alcohol', offTxt:'sin alcohol' },
+    { id:'screens', label:'Pantallas antes de dormir', icon:'📱',
+      has:e=>e.screen_minutes!=null, on:e=>Number(e.screen_minutes)>=30,
+      onTxt:'≥30 min de pantalla', offTxt:'poca o ninguna pantalla' }
+  ];
+  // Variables de salida. dirGood indica si SUBIR es mejor (+1) o peor (-1).
+  const salidas=[
+    { id:'tst',   label:'Sueño total',        unit:'min', dirGood:+1, val:e=>e.sleep_minutes },
+    { id:'lat',   label:'Latencia',           unit:'min', dirGood:-1, val:e=>e.sleep_latency_mins },
+    { id:'awk',   label:'Despertares',        unit:'',    dirGood:-1, val:e=>e.awakenings },
+    { id:'qual',  label:'Calidad percibida',  unit:'/5',  dirGood:+1, val:e=>e.sleep_quality }
+  ];
+  const avg=a=>a.reduce((x,y)=>x+y,0)/a.length;
+  const out=[];
+  habitos.forEach(hb=>{
+    const conDato=E.filter(hb.has);
+    if(conDato.length < 8) return;                 // no lo registra lo suficiente
+    const on =conDato.filter(hb.on);
+    const off=conDato.filter(e=>!hb.on(e));
+    if(on.length < 4 || off.length < 4) return;    // sin contraste no hay comparación
+    const efectos=[];
+    salidas.forEach(s=>{
+      const a=on .map(s.val).filter(v=>v!=null && !isNaN(v)).map(Number);
+      const b=off.map(s.val).filter(v=>v!=null && !isNaN(v)).map(Number);
+      if(a.length<4 || b.length<4) return;
+      const ma=avg(a), mb=avg(b), diff=ma-mb;
+      // Umbral de relevancia por variable: evita reportar ruido de 2 minutos.
+      const minDif = s.id==='tst'?15 : s.id==='lat'?8 : s.id==='awk'?0.4 : 0.4;
+      let signo=0;
+      if(Math.abs(diff) >= minDif) signo = (diff>0?1:-1) * s.dirGood; // +1 mejor, -1 peor
+      efectos.push({ id:s.id, label:s.label, unit:s.unit, mOn:ma, mOff:mb, diff, signo });
+    });
+    if(!efectos.length) return;
+    const netos=efectos.filter(x=>x.signo!==0);
+    let veredicto='neutro';
+    if(netos.length){
+      const suma=netos.reduce((a,x)=>a+x.signo,0);
+      veredicto = suma>0?'positivo' : suma<0?'negativo' : 'mixto';
+    }
+    out.push({ id:hb.id, label:hb.label, icon:hb.icon, onTxt:hb.onTxt, offTxt:hb.offTxt,
+               nOn:on.length, nOff:off.length, efectos, veredicto });
+  });
+  return { n:E.length, habitos:out };
+}
+
+function renderHabitsImpactHtml(entries){
+  const R=computeHabitsImpact(entries);
+  if(!R || R.error || !R.habitos || !R.habitos.length) return '';
+  const fmtDif=(ef)=>{
+    const d=ef.diff;
+    if(ef.id==='awk'||ef.id==='qual') return (d>0?'+':'')+d.toFixed(1)+ef.unit;
+    return (d>0?'+':'')+Math.round(d)+' '+ef.unit;
+  };
+  const colFor=s=> s>0?'#16a34a' : s<0?'#dc2626' : '#6b7280';
+  let html='<div class="dm-card" style="background:#fff;border-radius:14px;padding:14px 16px;margin-bottom:12px">'+
+    '<div style="font-size:13px;font-weight:700;color:var(--label);margin-bottom:3px">Impacto de hábitos '+
+      '<span style="font-weight:400;color:var(--label-3);font-size:11px">· '+R.n+' noches</span></div>'+
+    '<div style="font-size:11px;color:var(--label-3);line-height:1.5;margin-bottom:11px">'+
+      'Compara las noches con y sin cada hábito <em>en este mismo paciente</em>. Es una asociación, no una relación causal: puede haber factores de confusión (por ejemplo, tomar café justamente los días de peor descanso previo).</div>';
+  R.habitos.forEach(hb=>{
+    const vCol = hb.veredicto==='positivo'?'#16a34a' : hb.veredicto==='negativo'?'#dc2626' : '#6b7280';
+    const vTxt = hb.veredicto==='positivo'?'Asociado a mejor sueño'
+               : hb.veredicto==='negativo'?'Asociado a peor sueño'
+               : hb.veredicto==='mixto'?'Efecto mixto' : 'Sin diferencia relevante';
+    html+='<div style="border:1px solid #eceae4;border-radius:11px;padding:10px 12px;margin-bottom:8px">'+
+      '<div style="display:flex;align-items:center;gap:8px;margin-bottom:7px;flex-wrap:wrap">'+
+        '<span style="font-size:15px">'+hb.icon+'</span>'+
+        '<span style="font-size:12.5px;font-weight:700;color:var(--label)">'+hb.label+'</span>'+
+        '<span style="font-size:10px;font-weight:700;color:'+vCol+';background:'+vCol+'14;border-radius:99px;padding:2px 8px">'+vTxt+'</span>'+
+        '<span style="font-size:10px;color:var(--label-3);margin-left:auto">'+hb.nOn+' vs '+hb.nOff+' noches</span>'+
+      '</div>';
+    hb.efectos.forEach(ef=>{
+      html+='<div style="display:flex;justify-content:space-between;align-items:baseline;padding:3px 0;font-size:11.5px">'+
+        '<span style="color:#666">'+ef.label+'</span>'+
+        '<span><span style="color:#999;font-size:10.5px">'+
+          (ef.id==='awk'||ef.id==='qual'?ef.mOn.toFixed(1):Math.round(ef.mOn))+' vs '+
+          (ef.id==='awk'||ef.id==='qual'?ef.mOff.toFixed(1):Math.round(ef.mOff))+'</span> '+
+        '<b style="color:'+colFor(ef.signo)+'">'+fmtDif(ef)+'</b></span></div>';
+    });
+    html+='<div style="font-size:10px;color:var(--label-3);margin-top:5px">'+hb.onTxt+' vs '+hb.offTxt+'</div>';
+    html+='</div>';
+  });
+  html+='</div>';
+  return html;
+}
+
 function renderClinicalMetricsHtml(entries, audience){
   audience = audience || 'patient';
   const m = computeDiaryMetrics(entries);
@@ -10957,6 +11066,12 @@ async function showDrPTab_(tab){
           dme.innerHTML=renderClinicalMetricsHtml(subj, 'doctor');
           const _regSlot=document.getElementById('dr-reg-slot');
           if(_regSlot && dme.children.length>1) _regSlot.appendChild(dme.children[1]);
+          // Impacto de hábitos: solo aparece si el paciente REGISTRA el hábito
+          // (la función devuelve '' si no hay datos suficientes o contraste).
+          try{
+            const _hi=renderHabitsImpactHtml(subj);
+            if(_hi){ dme.insertAdjacentHTML('beforeend', _hi); }
+          }catch(_e){ console.warn('[habitos]', _e); }
         }
         // Progresión semanal (movida desde Resumen)
         const _wpEl=document.getElementById('dr-weekly-prog');
@@ -17176,6 +17291,7 @@ async function openCbtiProtocol(patientEmail, patientName){
     const rows = await db.get('cbti_progress?doctor_email=eq.'+encodeURIComponent(drEmail)+'&patient_email=eq.'+encodeURIComponent(patientEmail)+'&select=item_id,completed,completed_at,notes').catch(()=>[]);
     (rows||[]).forEach(r=>{ CBTI_STATE.progress[r.item_id]={completed:!!r.completed,completed_at:r.completed_at,notes:r.notes||''}; });
     renderCbtiProtocol();
+    try{ renderCbtiWindowPanel(patientEmail); }catch(e){ console.warn('[TCCI] panel ventana:', e); }
   }catch(err){
     console.error('[CBT-I protocol] load error:', err);
     cont.innerHTML = '<div style="padding:20px;color:#fca5a5">Error al cargar el protocolo. Asegurate de haber creado la tabla cbti_progress.</div>';
@@ -17188,6 +17304,8 @@ function renderCbtiProtocol(){
   const doneCount = Object.values(CBTI_STATE.progress).filter(p=>p.completed).length;
   const pct = Math.round(doneCount/CBTI_TOTAL_ITEMS*100);
   let html = '';
+  // Ventana de sueño: lo primero, porque es la intervención activa del protocolo.
+  html += '<div id="cbti-window-box"></div>';
   // Barra de progreso global
   html += '<div style="background:rgba(126,200,164,0.08);border:1px solid rgba(200,169,110,0.4);border-radius:14px;padding:16px;margin-bottom:18px">';
   html += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.06em;font-weight:700">Progreso del protocolo</div><div id="cbti-global-pct" style="font-size:22px;font-weight:700;color:#C8A96E">'+pct+'%</div></div>';
@@ -17586,6 +17704,147 @@ function computeSleepWindow(entries){
   return {n:last.length, avgTST, avgTIB, eff, windowMin, bedTarget, wakeTarget:avgWake,
           fmt, fmtDur, titr};
 }
+// ─── VENTANA DE SUEÑO (TCC-I) — cálculo compartido y ajuste profesional ───
+// El motor propone; el profesional dispone. computeSleepWindow() devuelve la
+// ventana calculada desde el diario, y el profesional puede sobrescribirla
+// (columnas window_bed/window_wake/window_note en cbti_patients).
+function dmMinsToHHMM(m){
+  m=((Math.round(m)%1440)+1440)%1440;
+  return String(Math.floor(m/60)).padStart(2,'0')+':'+String(m%60).padStart(2,'0');
+}
+function dmHHMMToMins(s){
+  const mm=/^(\d{1,2}):(\d{2})$/.exec(String(s||'').trim());
+  if(!mm) return null;
+  const h=+mm[1], m=+mm[2];
+  if(h>23||m>59) return null;
+  return h*60+m;
+}
+function dmWindowDuration(bed, wake){
+  let d = wake - bed; if(d<=0) d+=1440; return d;
+}
+// Trae el diario del paciente y calcula la ventana propuesta por el motor.
+async function dmComputeWindowFor(patientEmail){
+  try{
+    const d = await db.get('sleep_diary?patient_email=eq.'+encodeURIComponent(patientEmail)+
+      '&order=diary_date.desc&limit=30&select=bedtime,wake_time,sleep_minutes,notes,diary_date').catch(()=>[]);
+    return computeSleepWindow(d||[]);
+  }catch(e){ return {error:'load', n:0}; }
+}
+// Lee el ajuste guardado por el profesional. Si las columnas todavía no
+// existen en la base, devuelve null en lugar de romper la pantalla.
+async function dmGetWindowOverride(patientEmail, doctorEmail){
+  try{
+    let q='cbti_patients?patient_email=ilike.'+encodeURIComponent(patientEmail)+
+          '&select=window_bed,window_wake,window_note,window_set_at,doctor_email';
+    if(doctorEmail) q+='&doctor_email=eq.'+encodeURIComponent(doctorEmail);
+    const r=await db.get(q);
+    if(!r||!r.length) return null;
+    const row=r.find(x=>x.window_bed!=null&&x.window_wake!=null);
+    return row||null;
+  }catch(e){
+    console.warn('[TCCI] sin columnas de ventana todavía:', e.message);
+    return null;
+  }
+}
+
+// Panel que ve el PROFESIONAL: propuesta del motor + campos editables.
+async function renderCbtiWindowPanel(patientEmail){
+  const box=document.getElementById('cbti-window-box');
+  if(!box) return;
+  const drEmail=S.user.email;
+  const [sw, ov] = await Promise.all([
+    dmComputeWindowFor(patientEmail),
+    dmGetWindowOverride(patientEmail, drEmail)
+  ]);
+  window._cbtiWin = {sw, ov, patientEmail};
+  let html='<div style="background:rgba(126,200,164,0.06);border:1px solid rgba(200,169,110,0.35);border-radius:14px;padding:16px;margin-bottom:18px">'+
+    '<div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:.06em;font-weight:700;margin-bottom:10px">Ventana de sueño · restricción</div>';
+  if(!sw || sw.error){
+    html+='<div style="font-size:12.5px;color:rgba(255,255,255,0.6);line-height:1.55">Todavía no hay diario suficiente para calcular la ventana'+
+      (sw&&sw.n!=null?' ('+sw.n+' de 5 noches mínimas)':'')+'. Podés fijarla a mano igual.</div>';
+  } else {
+    const effCol = sw.eff>=90?'#7EC8A4':sw.eff>=85?'#C8A96E':'#fca5a5';
+    html+='<div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">'+
+      '<div style="flex:1;min-width:88px;background:rgba(255,255,255,0.05);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:.05em">TST PROMEDIO</div><div style="font-size:16px;font-weight:700;color:#fff">'+sw.fmtDur(sw.avgTST)+'</div></div>'+
+      '<div style="flex:1;min-width:88px;background:rgba(255,255,255,0.05);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:.05em">TIB PROMEDIO</div><div style="font-size:16px;font-weight:700;color:#fff">'+sw.fmtDur(sw.avgTIB)+'</div></div>'+
+      '<div style="flex:1;min-width:88px;background:rgba(255,255,255,0.05);border-radius:10px;padding:9px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.45);letter-spacing:.05em">EFICIENCIA</div><div style="font-size:16px;font-weight:700;color:'+effCol+'">'+sw.eff+'%</div></div>'+
+      '</div>'+
+      '<div style="font-size:12px;color:rgba(255,255,255,0.62);line-height:1.5;margin-bottom:12px;padding:9px 11px;background:rgba(255,255,255,0.04);border-radius:9px">'+
+        '<strong style="color:#C8A96E">Propuesta del motor:</strong> '+sw.fmt(sw.bedTarget)+' → '+sw.fmt(sw.wakeTarget)+
+        ' ('+sw.fmtDur(sw.windowMin)+', sobre '+sw.n+' noches). '+sw.titr.txt+'</div>';
+  }
+  const curBed  = ov&&ov.window_bed!=null  ? ov.window_bed  : (sw&&!sw.error? sw.bedTarget : 23*60);
+  const curWake = ov&&ov.window_wake!=null ? ov.window_wake : (sw&&!sw.error? sw.wakeTarget: 7*60);
+  html+='<div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">'+
+    '<div style="flex:1;min-width:120px"><label style="font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:.05em;display:block;margin-bottom:4px">ACOSTARSE</label>'+
+      '<input id="cbti-win-bed" type="time" value="'+dmMinsToHHMM(curBed)+'" oninput="previewCbtiWindow()" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:10px;color:#fff;font-size:15px;font-family:var(--font)"></div>'+
+    '<div style="flex:1;min-width:120px"><label style="font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:.05em;display:block;margin-bottom:4px">LEVANTARSE</label>'+
+      '<input id="cbti-win-wake" type="time" value="'+dmMinsToHHMM(curWake)+'" oninput="previewCbtiWindow()" style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:10px;color:#fff;font-size:15px;font-family:var(--font)"></div>'+
+    '</div>'+
+    '<div id="cbti-win-preview" style="font-size:12px;color:#7EC8A4;margin-bottom:10px"></div>'+
+    '<label style="font-size:10px;color:rgba(255,255,255,0.5);letter-spacing:.05em;display:block;margin-bottom:4px">INDICACIÓN PARA EL PACIENTE (opcional)</label>'+
+    '<textarea id="cbti-win-note" rows="2" placeholder="Ej: sostené esta ventana 7 noches; si la eficiencia sube de 90% adelantamos 15 min." style="width:100%;background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.16);border-radius:10px;padding:10px;color:#fff;font-size:13px;font-family:var(--font);resize:vertical">'+((ov&&ov.window_note)?String(ov.window_note).replace(/</g,'&lt;'):'')+'</textarea>'+
+    '<div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap">'+
+      '<button id="cbti-win-save" onclick="saveCbtiWindow()" style="flex:1;min-width:150px;background:#7EC8A4;color:#0F2820;border:none;border-radius:10px;padding:11px;font-size:13.5px;font-weight:700;cursor:pointer;font-family:var(--font)">Guardar ventana</button>'+
+      (sw&&!sw.error?'<button onclick="resetCbtiWindowToEngine()" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.2);color:#fff;border-radius:10px;padding:11px 14px;font-size:12.5px;cursor:pointer;font-family:var(--font)">Usar la del motor</button>':'')+
+    '</div>';
+  if(ov&&ov.window_set_at){
+    html+='<div style="font-size:10.5px;color:rgba(255,255,255,0.4);margin-top:8px">Ajustada el '+new Date(ov.window_set_at).toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'numeric'})+'. El paciente ve esta ventana, no la del motor.</div>';
+  }
+  html+='</div>';
+  box.innerHTML=html;
+  previewCbtiWindow();
+}
+function previewCbtiWindow(){
+  const b=dmHHMMToMins(document.getElementById('cbti-win-bed')?.value);
+  const w=dmHHMMToMins(document.getElementById('cbti-win-wake')?.value);
+  const el=document.getElementById('cbti-win-preview');
+  if(!el) return;
+  if(b==null||w==null){ el.textContent=''; return; }
+  const dur=dmWindowDuration(b,w);
+  const hh=Math.floor(dur/60), mm=dur%60;
+  let msg='Ventana: '+hh+' h '+String(mm).padStart(2,'0')+' m en cama.';
+  if(dur<300){ el.style.color='#fca5a5'; msg+=' Por debajo del piso de seguridad de 5 h que recomiendan las guías.'; }
+  else if(dur>540){ el.style.color='#C8A96E'; msg+=' Muy amplia para una fase de restricción.'; }
+  else { el.style.color='#7EC8A4'; }
+  el.textContent=msg;
+}
+function resetCbtiWindowToEngine(){
+  const sw=(window._cbtiWin||{}).sw; if(!sw||sw.error) return;
+  const b=document.getElementById('cbti-win-bed'), w=document.getElementById('cbti-win-wake');
+  if(b) b.value=dmMinsToHHMM(sw.bedTarget);
+  if(w) w.value=dmMinsToHHMM(sw.wakeTarget);
+  previewCbtiWindow();
+}
+async function saveCbtiWindow(){
+  const st=window._cbtiWin||{};
+  const patEmail=st.patientEmail||CBTI_STATE.patientEmail;
+  if(!patEmail) return;
+  const bed=dmHHMMToMins(document.getElementById('cbti-win-bed')?.value);
+  const wake=dmHHMMToMins(document.getElementById('cbti-win-wake')?.value);
+  if(bed==null||wake==null){ toast('Revisá los horarios'); return; }
+  const dur=dmWindowDuration(bed,wake);
+  if(dur<240){ toast('La ventana no puede ser menor a 4 h'); return; }
+  const note=(document.getElementById('cbti-win-note')?.value||'').trim();
+  setBtn('cbti-win-save', true);
+  try{
+    const drEmail=S.user.email;
+    await fetch(SU+'/rest/v1/cbti_patients',{
+      method:'POST',
+      headers:{'apikey':SK,'Authorization':await db._getAuthHeader(),'Content-Type':'application/json',
+               'Prefer':'resolution=merge-duplicates,return=minimal'},
+      body:JSON.stringify({doctor_email:drEmail, patient_email:(patEmail||'').toLowerCase(), active:true,
+                           window_bed:bed, window_wake:wake, window_note:note||null,
+                           window_set_at:new Date().toISOString()})
+    }).then(async r=>{ if(!r.ok){ throw new Error(await r.text()); } });
+    toast('Ventana guardada ✓');
+    renderCbtiWindowPanel(patEmail);
+  }catch(e){
+    console.error('[TCCI] guardar ventana:', e);
+    toast('No se pudo guardar. Faltan las columnas de ventana en la base.');
+  }finally{ setBtn('cbti-win-save', false, 'Guardar ventana'); }
+}
+
 async function openPatientCbtiView(){
   showScreen('patient-tcci');
   const cont = document.getElementById('patient-tcci-content');
@@ -17646,6 +17905,31 @@ async function openPatientCbtiView(){
     const doneCount = Object.values(progressMap).filter(p=>p.completed).length;
     const pct = Math.round(doneCount/CBTI_TOTAL_ITEMS*100);
     let html = '';
+    // ── Ventana de sueño: si el profesional la ajustó, manda la suya; si no,
+    //    mostramos la que calcula el motor desde el diario. ──
+    try{
+      const ov = await dmGetWindowOverride(patEmail, null);
+      let bed=null, wake=null, note='', fuente='';
+      if(ov && ov.window_bed!=null && ov.window_wake!=null){
+        bed=ov.window_bed; wake=ov.window_wake; note=ov.window_note||'';
+        fuente='Indicada por tu profesional';
+      } else {
+        const sw = await dmComputeWindowFor(patEmail);
+        if(sw && !sw.error){ bed=sw.bedTarget; wake=sw.wakeTarget; note=sw.titr.txt; fuente='Calculada desde tu diario'; }
+      }
+      if(bed!=null){
+        const dur=dmWindowDuration(bed,wake);
+        html += '<div style="background:linear-gradient(135deg,rgba(126,200,164,0.16),rgba(200,169,110,0.08));border:1px solid rgba(200,169,110,0.45);border-radius:16px;padding:16px;margin-bottom:16px">'+
+          '<div style="font-size:10px;color:#C8A96E;letter-spacing:.09em;font-weight:700;text-transform:uppercase;margin-bottom:10px">'+fuente+'</div>'+
+          '<div style="display:flex;gap:10px;margin-bottom:10px">'+
+            '<div style="flex:1;background:rgba(255,255,255,0.07);border-radius:12px;padding:11px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:.06em">ACOSTARTE</div><div style="font-size:23px;font-weight:700;color:#fff">'+dmMinsToHHMM(bed)+'</div></div>'+
+            '<div style="flex:1;background:rgba(255,255,255,0.07);border-radius:12px;padding:11px;text-align:center"><div style="font-size:9px;color:rgba(255,255,255,0.5);letter-spacing:.06em">LEVANTARTE</div><div style="font-size:23px;font-weight:700;color:#fff">'+dmMinsToHHMM(wake)+'</div></div>'+
+          '</div>'+
+          '<div style="font-size:11.5px;color:rgba(255,255,255,0.62);text-align:center;margin-bottom:'+(note?'10px':'0')+'">'+Math.floor(dur/60)+' h '+String(dur%60).padStart(2,'0')+' m en cama</div>'+
+          (note?'<div style="font-size:12.5px;color:rgba(255,255,255,0.8);line-height:1.55;background:rgba(255,255,255,0.05);border-radius:10px;padding:11px">'+String(note).replace(/</g,'&lt;')+'</div>':'')+
+        '</div>';
+      }
+    }catch(e){ console.warn('[patient-tcci] ventana:', e); }
     html += '<div style="background:linear-gradient(135deg,rgba(126,200,164,0.12),rgba(200,169,110,0.08));border:1px solid rgba(200,169,110,0.4);border-radius:14px;padding:16px;margin-bottom:18px">';
     html += '<div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px"><div style="font-size:12px;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:0.06em;font-weight:700">Tu progreso</div><div style="font-size:22px;font-weight:700;color:#C8A96E">'+pct+'%</div></div>';
     html += '<div style="height:10px;background:rgba(255,255,255,0.08);border-radius:5px;overflow:hidden"><div style="height:100%;width:'+pct+'%;background:linear-gradient(90deg,#7ec8a4,#C8A96E);transition:width 0.3s"></div></div>';
