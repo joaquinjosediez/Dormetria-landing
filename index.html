@@ -764,7 +764,8 @@
   @media (max-width: 620px){
     .dmo-laptop-fit{
       /* Alto reservado = alto real x escala, para que no quede hueco debajo. */
-      height:calc(var(--lap-h, 430px) * var(--lap-s, .62));
+      /* Alto de diseno de la notebook (crecio al sumar los pilares). */
+      height:calc(var(--lap-h, 620px) * var(--lap-s, .62));
       overflow:visible;
     }
     .dmo-laptop-fit > .dmo-laptop{
@@ -1003,7 +1004,7 @@
     <div class="dm-aud-sub">Ordenamos la página para vos. Después podés cambiar de vista arriba, cuando quieras.</div>
     <div class="dm-aud-opts">
       <div class="dm-aud-opt" onclick="dmChooseAudience('pro')">
-        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
+        <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" width="23" height="23"><path d="M12 2v20"/><path d="M12 5.2c2.6 0 2.6 2.6 0 2.6s-2.6 2.6 0 2.6 2.6 2.6 0 2.6-2.6 2.6 0 2.6 2.6 2.6 0 2.6"/><path d="M9.6 4.2c.9-.9 2-1.2 2.4-1.2"/><circle cx="9.2" cy="4" r=".9"/></svg></div>
         <h4>Soy profesional de la salud</h4>
         <p>Seguimiento clínico del sueño de mis pacientes: panel, escalas y métricas.</p>
       </div>
@@ -1128,21 +1129,21 @@
     </div>
     <div class="problema-cards reveal">
       <div class="problema-card">
-        <div class="card-icon">📋</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
         <div class="card-txt">
           <h4>Escalas en papel o PDF</h4>
           <p>Se pierden, no se pueden comparar entre sesiones, y no generan ninguna alerta clínica.</p>
         </div>
       </div>
       <div class="problema-card">
-        <div class="card-icon">💬</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.42-4.03 8-9 8a9.86 9.86 0 01-4.26-.95L3 20l1.4-3.6A7.86 7.86 0 013 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></div>
         <div class="card-txt">
           <h4>WhatsApp como historia clínica</h4>
           <p>Mensajes de voz, fotos de planillas, notas al margen. Funciona, pero no escala ni es seguro.</p>
         </div>
       </div>
       <div class="problema-card">
-        <div class="card-icon">🔍</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
         <div class="card-txt">
           <h4>Cero trazabilidad entre consultas</h4>
           <p>No hay forma de ver si el paciente mejoró, empeoró, o si cumplió las indicaciones.</p>
@@ -1193,21 +1194,21 @@
     </div>
     <div class="problema-cards reveal">
       <div class="problema-card">
-        <div class="card-icon">🗓️</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 11h18"/></svg></div>
         <div class="card-txt">
           <h4>Tratamientos más rápidos</h4>
           <p>Con datos de todas las noches, los ajustes se hacen sobre lo que pasó de verdad — no sobre una impresión.</p>
         </div>
       </div>
       <div class="problema-card">
-        <div class="card-icon">📈</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 17l6-6 4 4 7-7"/><path d="M14 8h6v6"/></svg></div>
         <div class="card-txt">
           <h4>Ves si estás mejorando</h4>
           <p>Las escalas se repiten en el tiempo y comparás tu resultado de hoy con el de hace dos meses.</p>
         </div>
       </div>
       <div class="problema-card">
-        <div class="card-icon">🔒</div>
+        <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 118 0v4"/></svg></div>
         <div class="card-txt">
           <h4>Tus datos son tuyos</h4>
           <p>Nadie ve tu información salvo el profesional al que vos elijas darle el código.</p>
@@ -1297,9 +1298,14 @@
   </div>
 </section>
 
-<section class="only-patient" style="padding:0 5vw 5rem">
+<section class="only-patient" style="padding:1rem 5vw 6rem">
 <div style="max-width:1000px;margin:0 auto">
-<div style="display:flex;justify-content:center;gap:22px;flex-wrap:wrap">
+<div class="section-header reveal" style="margin-bottom:2.5rem">
+  <p class="label-seccion">En tu teléfono</p>
+  <h2>Así se ve.</h2>
+  <p>Se instala sin pasar por ninguna tienda, te recuerda registrar y guarda cada escala con su evolución.</p>
+</div>
+<div class="dmo-set" style="display:flex;justify-content:center;gap:22px;flex-wrap:wrap">
   <div class="dmo-phone" style="height:400px"><div class="dmo-screen">
     <div class="dmo-track" style="animation:dmoC2 9s infinite">
       <div class="dmo-pane" style="display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center">
@@ -1348,7 +1354,7 @@
     </div>
   </div></div>
 </div>
-<p class="dmo-caption">Se instala sin tienda de apps, recuerda registrar y guarda cada escala con su evolución.</p>
+
 </div>
 </section>
 
@@ -1365,6 +1371,26 @@
     </div>
 
     <div class="features-panel active" id="tab-medicos">
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M7 7h.01M7 3h5a2 2 0 011.41.59l7 7a2 2 0 010 2.82l-5.59 5.59a2 2 0 01-2.82 0l-7-7A2 2 0 013 8.59V5a2 2 0 012-2z"/></svg></div>
+        <h4>Etiquetas por patología</h4>
+        <p>Marcá cada paciente con SAHOS, insomnio, SPI, parasomnia, narcolepsia o cronodisrupción. Filtrás el listado con un toque y encontrás a quien buscás sin scrollear.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/><path d="M18 6l3-3 0 0"/></svg></div>
+        <h4>Métricas de toda tu cartera</h4>
+        <p>Adherencia al día, quién aflojó y quién abandonó, tasa de abandono, evolución del score y escalas pedidas contra respondidas. Una vista global, no paciente por paciente.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zM21 5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 002 2h2a2 2 0 002-2z"/></svg></div>
+        <h4>Métricas clínicas de la literatura</h4>
+        <p>Eficiencia de sueño, latencia, TIB, jet lag social, SD del punto medio, SRI (Phillips 2017) y CPD (Fischer 2016). Los parámetros con los que se sigue de verdad un trastorno del sueño.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <h4>Estudios en la misma ficha</h4>
+        <p>Subí polisomnografías, poligrafías respiratorias, actigrafías y laboratorio. Todo queda junto al diario y las escalas del paciente, sin buscar en otro lado.</p>
+      </div>
       <div class="feature-card reveal">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
         <h4>Panel clínico completo</h4>
@@ -1538,8 +1564,8 @@
 
     </div>
   </div></div>
+<p class="dmo-caption" style="margin-top:.9rem">Registrar la noche, ver tu score y tu evolución.</p>
 </div>
-<p class="dmo-caption">Así se ve la app del paciente: registrar la noche, ver su score y su evolución.</p>
       <div class="pac-card">
         <h3>Empezá a registrar tu sueño</h3>
         <p>Diario de sueño, escalas clínicas validadas y tus gráficos de evolución, en tu navegador. Durante la beta, el acceso es sin costo.</p>
@@ -1577,6 +1603,43 @@
           <div><span style="font-size:12.5px;color:#1a4a3a">Ada Lovelace</span>
             <span style="font-size:9px;color:#888;margin-left:6px">36 años · F · IMC 22.4</span></div>
           <span class="dmo-tag" style="background:#ef4444;color:#fff">Insomnio</span>
+        </div>
+        <div style="display:flex;gap:9px;margin-bottom:9px;align-items:stretch">
+          <div style="flex:0 0 86px;background:#fdf6e8;border-radius:8px;padding:7px 6px;text-align:center;display:flex;flex-direction:column;justify-content:center">
+            <div style="font-size:7px;color:#a8893f;letter-spacing:.08em;font-weight:600">SCORE DE SUEÑO</div>
+            <div style="font-size:25px;color:#d97706;line-height:1.1;font-weight:400">62</div>
+            <div style="font-size:9px;color:#d97706;font-weight:600">Regular</div>
+            <div style="font-size:6.5px;color:#999;margin-top:2px">9 noches</div>
+          </div>
+          <div style="flex:1;display:flex;gap:5px">
+            <div style="flex:1;border-top:2px solid #ef4444;background:#fafaf7;border-radius:0 0 7px 7px;padding:6px 6px">
+              <div style="font-size:7px;color:#b91c1c;letter-spacing:.05em;font-weight:600">CANTIDAD</div>
+              <div style="font-size:16px;color:#ef4444;font-weight:600;line-height:1.15">59<span style="font-size:9px">%</span></div>
+              <div style="font-size:6.5px;color:#ef4444">Requiere atención</div>
+              <div style="font-size:6px;color:#999;margin-top:1px">7–9h recomendado</div>
+            </div>
+            <div style="flex:1;border-top:2px solid #0ea5e9;background:#fafaf7;border-radius:0 0 7px 7px;padding:6px 6px">
+              <div style="font-size:7px;color:#0369a1;letter-spacing:.05em;font-weight:600">FRAGMENTACIÓN</div>
+              <div style="font-size:16px;color:#0ea5e9;font-weight:600;line-height:1.15">89<span style="font-size:9px">%</span></div>
+              <div style="font-size:6.5px;color:#0369a1">Bien</div>
+              <div style="font-size:6px;color:#999;margin-top:1px">0.6 despertares/noche</div>
+            </div>
+            <div style="flex:1;border-top:2px solid #f59e0b;background:#fafaf7;border-radius:0 0 7px 7px;padding:6px 6px">
+              <div style="font-size:7px;color:#b45309;letter-spacing:.05em;font-weight:600">REGULARIDAD</div>
+              <div style="font-size:16px;color:#f59e0b;font-weight:600;line-height:1.15">56<span style="font-size:9px">%</span></div>
+              <div style="font-size:6.5px;color:#b45309">Requiere atención</div>
+              <div style="font-size:6px;color:#999;margin-top:1px">SRI Phillips: 74.1</div>
+            </div>
+          </div>
+        </div>
+        <div style="font-size:8px;color:#666;letter-spacing:.07em;margin-bottom:4px">PILARES DEL SUEÑO · 30 DÍAS</div>
+        <div style="position:relative;height:58px;margin-bottom:9px;background:#fafaf7;border-radius:7px;padding:5px 6px">
+          <svg id="dmoPilares" viewBox="0 0 300 48" preserveAspectRatio="none" style="width:100%;height:100%;display:block"></svg>
+        </div>
+        <div style="display:flex;gap:10px;font-size:6.5px;color:#666;margin:-5px 0 9px;justify-content:center">
+          <span><b style="color:#22c55e">●</b> Cantidad</span>
+          <span><b style="color:#0ea5e9">●</b> Fragmentación</span>
+          <span><b style="color:#f59e0b">●</b> Regularidad</span>
         </div>
         <div style="font-size:8px;color:#666;letter-spacing:.07em;margin-bottom:5px">ACTOGRAMA — 14 NOCHES</div>
         <div style="position:relative;overflow:hidden;margin-bottom:9px"><div id="dmoActo"></div>
@@ -1721,6 +1784,34 @@
       document.getElementById('tab-' + btn.dataset.tab).classList.add('active');
     });
   });
+
+  // ── Pilares del sueño en la demo del panel: tres series diarias, como en el
+  //    panel real (linea con puntos). Los valores son de una ficha real.
+  (function(){
+    var svg=document.getElementById('dmoPilares'); if(!svg) return;
+    var series=[
+      { c:'#22c55e', v:[74,82,68,88,79,91,64,86,72,90,58,84,77,69,88,62,80,73,86,59,83,70,89,64,78,85,61,87,72,80] },
+      { c:'#0ea5e9', v:[88,84,90,86,92,83,89,94,87,85,91,88,83,90,86,93,84,89,87,91,85,88,92,86,84,90,87,93,85,89] },
+      { c:'#f59e0b', v:[52,61,44,58,39,66,48,35,57,42,63,50,33,59,46,55,38,62,49,41,57,36,60,47,53,40,58,44,51,56] }
+    ];
+    var W=300,H=48,n=series[0].v.length,pad=3;
+    var x=function(i){ return pad + i*(W-2*pad)/(n-1); };
+    var y=function(v){ return H-pad - (v/100)*(H-2*pad); };
+    var out='';
+    series.forEach(function(s,si){
+      var d=s.v.map(function(v,i){ return (i?'L':'M')+x(i).toFixed(1)+' '+y(v).toFixed(1); }).join(' ');
+      var len=1400;
+      out+='<path d="'+d+'" fill="none" stroke="'+s.c+'" stroke-width="1.2" stroke-linejoin="round" '+
+           'stroke-dasharray="'+len+'" stroke-dashoffset="'+len+'">'+
+           '<animate attributeName="stroke-dashoffset" from="'+len+'" to="0" dur="2.6s" begin="'+(si*0.25)+'s" fill="freeze"/></path>';
+      s.v.forEach(function(v,i){
+        if(i%3) return;
+        out+='<circle cx="'+x(i).toFixed(1)+'" cy="'+y(v).toFixed(1)+'" r="1.3" fill="'+s.c+'" opacity="0">'+
+             '<animate attributeName="opacity" from="0" to="1" dur=".3s" begin="'+(si*0.25 + 0.4 + i*0.06)+'s" fill="freeze"/></circle>';
+      });
+    });
+    svg.innerHTML=out;
+  })();
 
   // ── Scroll reveal
   const observer = new IntersectionObserver(entries => {
