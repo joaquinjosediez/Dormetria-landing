@@ -862,12 +862,13 @@
   .dm-aud-opts{ display:grid; grid-template-columns:1fr 1fr; gap:14px; }
   .dm-aud-opt{
     background:var(--blanco); border:1.5px solid var(--crema-oscuro); border-radius:18px;
-    padding:22px 18px; cursor:pointer; transition:all .18s; text-align:left;
+    padding:24px 18px; cursor:pointer; transition:all .18s; text-align:center;
+    display:flex; flex-direction:column; align-items:center;
   }
   .dm-aud-opt:hover{ border-color:var(--menta); transform:translateY(-3px); box-shadow:0 12px 30px rgba(26,74,58,.1); }
-  .dm-aud-opt .ic{ width:44px; height:44px; border-radius:12px; background:var(--menta-suave); display:flex; align-items:center; justify-content:center; margin-bottom:12px; }
-  .dm-aud-opt h4{ font-size:1.05rem; color:var(--verde); margin-bottom:4px; font-weight:600; }
-  .dm-aud-opt p{ font-size:.82rem; color:var(--texto-suave); line-height:1.45; }
+  .dm-aud-opt .ic{ width:48px; height:48px; border-radius:14px; background:var(--menta-suave); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+  .dm-aud-opt h4{ font-size:1.05rem; color:var(--verde); margin-bottom:6px; font-weight:600; }
+  .dm-aud-opt p{ font-size:.84rem; color:var(--texto-suave); line-height:1.5; max-width:26ch; margin:0 auto; }
   .dm-aud-skip{ margin-top:20px; background:none; border:none; color:var(--texto-suave); font-size:.85rem; cursor:pointer; text-decoration:underline; }
   @media (max-width:520px){ .dm-aud-opts{ grid-template-columns:1fr; } }
 
@@ -1047,6 +1048,21 @@
   .dm-aud-card{ border-radius: 28px; }
   .dm-aud-opt{ border-radius: 20px; }
 
+  /* Titular escalonado: cada oración en su propia línea, nunca partida al
+     medio, y con dos tamaños distintos para darle ritmo. */
+  .h2-escalonado{ display:block; }
+  .h2-escalonado .l1,
+  .h2-escalonado .l2{ display:block; text-wrap:balance; }
+  .h2-escalonado .l1{
+    font-size:.52em; line-height:1.15; letter-spacing:-.018em;
+    color:var(--texto-suave); margin-bottom:.35em; font-style:normal;
+  }
+  .h2-escalonado .l2{ font-size:1em; line-height:1.02; }
+  .h2-escalonado .l2 em{ font-style:italic; color:var(--verde-med); }
+  @media (min-width:760px){
+    .h2-escalonado .l1, .h2-escalonado .l2{ white-space:nowrap; }
+  }
+
   /* 7. Movil: el titular no puede comerse la pantalla. */
   @media (max-width: 600px){
     h1{ font-size: clamp(2.6rem, 11vw, 3.4rem); letter-spacing: -0.035em; }
@@ -1111,8 +1127,8 @@
   <div class="hero-inner">
   <div class="hero-content only-pro">
     <div class="hero-badge"><span></span> Beta abierta para profesionales</div>
-    <h1>El sueño,<br><em>medido en serio.</em></h1>
-    <p class="hero-sub">Diario, escalas validadas, actograma y métricas clínicas de cada paciente, entre consulta y consulta. Para decidir con datos, no con recuerdos.</p>
+    <h1>El seguimiento del sueño,<br><em>en serio.</em></h1>
+    <p class="hero-sub">Lo que el paciente vive, no lo que recuerda: diario, escalas validadas, actograma y métricas clínicas entre consulta y consulta.</p>
     <div class="hero-actions">
       <a href="#beta" class="btn-primary">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1141,8 +1157,8 @@
 
   <div class="hero-content only-patient">
     <div class="hero-badge"><span></span> Sin costo durante la beta</div>
-    <h1>Entendé<br><em>cómo dormís.</em></h1>
-    <p class="hero-sub">Registrá tu sueño en dos minutos por día y descubrí qué lo mejora y qué lo arruina. Con datos reales, no con la sensación de la mañana siguiente.</p>
+    <h1>Entendé cómo dormís,<br><em>con tus datos.</em></h1>
+    <p class="hero-sub">Registrá tu noche en dos minutos y descubrí qué mejora tu descanso y qué lo arruina — sobre tus propios números, no sobre la sensación de la mañana siguiente.</p>
     <div class="hero-actions">
       <a href="https://app.dormetria.com" class="btn-primary">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1192,31 +1208,34 @@
 <section class="section-problema only-pro">
   <div class="problema-inner">
     <div class="problema-texto reveal">
-      <p class="label-seccion">El problema</p>
-      <h2>El seguimiento del sueño está roto.</h2>
-      <p>Entre consultas, tus pacientes no tienen forma estructurada de registrar lo que les pasa. Vos no tenés manera de ver la evolución real. Las escalas se aplican en papel, si es que se aplican.</p>
-      <p>El resultado: decisiones clínicas basadas en lo que el paciente recuerda, no en lo que realmente vivió.</p>
+      <p class="label-seccion">La brecha</p>
+      <h2 class="h2-escalonado">
+        <span class="l1">El diagnóstico es preciso.</span>
+        <span class="l2">El intervalo, <em>a ciegas.</em></span>
+      </h2>
+      <p>La polisomnografía, la poligrafía respiratoria y la actigrafía miden con un rigor que ninguna app iguala. Pero cubren una noche, o unos días. Lo que pasa en las semanas siguientes —que es donde se decide si el tratamiento funciona— vuelve a la consulta como relato.</p>
+      <p>El paciente cuenta la última mala noche, no el mes. Y las escalas, si se aplican, quedan en papel y no se pueden comparar con las de la vez anterior.</p>
     </div>
     <div class="problema-cards reveal">
       <div class="problema-card">
         <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg></div>
         <div class="card-txt">
-          <h4>Escalas en papel o PDF</h4>
-          <p>Se pierden, no se pueden comparar entre sesiones, y no generan ninguna alerta clínica.</p>
+          <h4>Escalas que no se comparan</h4>
+          <p>En papel o PDF quedan sueltas: no hay serie temporal, no hay delta entre consultas, no hay alerta cuando un puntaje empeora.</p>
         </div>
       </div>
       <div class="problema-card">
         <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.42-4.03 8-9 8a9.86 9.86 0 01-4.26-.95L3 20l1.4-3.6A7.86 7.86 0 013 12c0-4.42 4.03-8 9-8s9 3.58 9 8z"/></svg></div>
         <div class="card-txt">
-          <h4>WhatsApp como historia clínica</h4>
-          <p>Mensajes de voz, fotos de planillas, notas al margen. Funciona, pero no escala ni es seguro.</p>
+          <h4>El diario, disperso</h4>
+          <p>Planillas fotografiadas, mensajes de voz, anotaciones al margen. Llega la información, pero no en un formato con el que se pueda calcular nada.</p>
         </div>
       </div>
       <div class="problema-card">
         <div class="card-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg></div>
         <div class="card-txt">
-          <h4>Cero trazabilidad entre consultas</h4>
-          <p>No hay forma de ver si el paciente mejoró, empeoró, o si cumplió las indicaciones.</p>
+          <h4>Adherencia invisible</h4>
+          <p>Si cumplió la ventana de sueño, si sostuvo los horarios, si dejó de registrar hace tres semanas: nada de eso se ve hasta que vuelve.</p>
         </div>
       </div>
     </div>
@@ -1316,30 +1335,7 @@
   </div>
 </section>
 
-<!-- ═══ TCC-I · versión profesional ═══ -->
-<section class="section-como only-pro">
-  <div class="inner">
-    <div class="section-header reveal">
-      <p class="label-seccion">Módulo TCC-I</p>
-      <h2>Restricción de sueño,<br>calculada sobre el diario.</h2>
-      <p>El protocolo de primera línea, con la aritmética resuelta y la adherencia a la vista.</p>
-    </div>
-    <div class="steps">
-      <div class="step reveal">
-        <h3>Ventana calculada</h3>
-        <p>El motor toma el tiempo total de sueño y la eficiencia de las últimas noches del diario y propone la ventana, con los ajustes semanales según el criterio de eficiencia.</p>
-      </div>
-      <div class="step reveal">
-        <h3>Vos tenés la última palabra</h3>
-        <p>La propuesta es un punto de partida: podés modificar la ventana, el ritmo de progresión y las pautas de cada semana desde el panel.</p>
-      </div>
-      <div class="step reveal">
-        <h3>Adherencia visible</h3>
-        <p>Ves si cumple la ventana, cómo evoluciona la eficiencia y en qué semana del protocolo está cada paciente — sin pedirle que te cuente.</p>
-      </div>
-    </div>
-  </div>
-</section>
+
 
 <section class="section-como only-pro" id="como-funciona">
   <div class="inner">
@@ -1363,6 +1359,31 @@
         <span class="step-num">03</span>
         <h3>Vos tomás mejores decisiones</h3>
         <p>En tu panel ves la evolución real: gráficos, tendencias, alertas y comparación entre consultas. Todo listo para la próxima sesión.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TCC-I · versión profesional ═══ -->
+<section class="section-como only-pro">
+  <div class="inner">
+    <div class="section-header reveal">
+      <p class="label-seccion">Módulo TCC-I</p>
+      <h2>Restricción de sueño,<br>calculada sobre el diario.</h2>
+      <p>El protocolo de primera línea, con la aritmética resuelta y la adherencia a la vista.</p>
+    </div>
+    <div class="steps">
+      <div class="step reveal">
+        <h3>Ventana calculada</h3>
+        <p>El motor toma el tiempo total de sueño y la eficiencia de las últimas noches del diario y propone la ventana, con los ajustes semanales según el criterio de eficiencia.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Vos tenés la última palabra</h3>
+        <p>La propuesta es un punto de partida: podés modificar la ventana, el ritmo de progresión y las pautas de cada semana desde el panel.</p>
+      </div>
+      <div class="step reveal">
+        <h3>Adherencia visible</h3>
+        <p>Ves si cumple la ventana, cómo evoluciona la eficiencia y en qué semana del protocolo está cada paciente — sin pedirle que te cuente.</p>
       </div>
     </div>
   </div>
