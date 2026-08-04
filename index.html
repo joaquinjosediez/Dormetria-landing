@@ -97,14 +97,67 @@
     overflow: hidden;
   }
 
+  /* Mismo fondo EXACTO que la pantalla de inicio de la app: verde noche con
+     un halo tenue arriba. Antes el degradado subía hacia el menta y al pasar
+     del sitio a la app había un salto de color evidente. */
+  /* Cielo nocturno como el de la app: OSCURO en el cenit y aclarando hacia
+     el horizonte, donde queda el resplandor de la ciudad. Lo que se ve negro
+     abajo del todo es la silueta de los árboles, no el cielo. */
   .hero-bg {
     position: absolute; inset: 0; z-index: 0;
     background:
-      radial-gradient(ellipse 80% 60% at 70% 40%, rgba(61,143,112,0.18) 0%, transparent 60%),
-      radial-gradient(ellipse 50% 50% at 10% 80%, rgba(126,200,164,0.08) 0%, transparent 50%);
+      radial-gradient(ellipse 90% 40% at 50% 88%, rgba(61,143,112,0.45) 0%, transparent 70%),
+      linear-gradient(to bottom, #071410 0%, #0b1f18 22%, #14382b 58%, #24614b 88%, #2d6b55 100%);
   }
+  /* Silueta del paisaje: MISMOS valores que #dm-skyline en la app. Con
+     height:62% la imagen se recortaba y aparecía como una franja negra. */
+  /* Silueta vectorial: la ilustración original es 572x1024 (vertical) y con
+     object-fit:cover en un hero ancho se ampliaba tanto que solo se veía el
+     suelo — la pantalla quedaba negra. En SVG escala a cualquier ancho. */
+  .hero-skyline{
+    position: absolute; bottom: 0; left: 0; width: 100%;
+    height: clamp(210px, 42vh, 420px);
+    z-index: 1; pointer-events: none; display: block;
+  }
+  .hero-veil{
+    position: absolute; left:0; right:0; bottom:0; height: 46%; z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(to top, rgba(2,12,8,0.30), transparent);
+  }
+  /* La media luna del logo, suelta en el cielo: apenas a la derecha del
+     centro y por encima del titular, cerca del teléfono del hero. */
+  .hero-moon{
+    position: absolute; z-index: 2; pointer-events: none;
+    top: 14%; left: 58%;
+    /* Al doblar el tamaño desde un anclaje arriba-izquierda, la luna se
+       correría hacia abajo y a la derecha: el translate de -25% del propio
+       tamaño devuelve el centro al punto original. */
+    transform: translate(-25%, -25%);
+    width: clamp(116px, 14vw, 216px); height: auto;
+    fill: #E8F3EC;
+    opacity: .92;
+    filter: drop-shadow(0 0 40px rgba(200,232,214,0.32));
+    animation: moonGlow 7s ease-in-out infinite;
+  }
+  @keyframes moonGlow{
+    0%,100%{ opacity:.92; filter: drop-shadow(0 0 40px rgba(200,232,214,0.30)); }
+    50%    { opacity:1;   filter: drop-shadow(0 0 56px rgba(200,232,214,0.44)); }
+  }
+  @media (max-width: 900px){
+    .hero-moon{ top: 11%; left: 66%; width: clamp(104px, 32vw, 168px); }
+  }
+  @media (prefers-reduced-motion: reduce){ .hero-moon{ animation: none; } }
 
-  /* floating circles decoration */
+  /* Estrellas, igual que #dm-stars: por encima de la silueta. */
+  .hero-stars{ position: absolute; inset: 0; z-index: 2; pointer-events: none; }
+  /* El contenido del hero va por encima de todas las capas. */
+  .hero-inner{ position: relative; z-index: 3; }
+  /* El hero pasa a ser noche cerrada: el resto de la página sigue igual. */
+  .hero{ background: #071410 !important; }
+  body{ background: #071410 !important; }
+
+  /* Los círculos decorativos competían con la silueta del paisaje. */
+  .hero-bg::before, .hero-bg::after { display: none !important; }
   .hero-bg::before {
     content: '';
     position: absolute; top: 15%; right: 8%;
@@ -465,7 +518,7 @@
   .tab-btn:hover:not(.active) { border-color: var(--verde); color: var(--verde); }
 
   .features-panel { display: none; }
-  .features-panel.active { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+  .features-panel.active { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.25rem; }
 
   .feature-card {
     background: var(--blanco);
@@ -739,6 +792,10 @@
   .dmo-caption{font-size:.85rem;color:var(--texto-suave);text-align:center;margin-top:1rem;font-style:italic}
 
   /* ─── RESPONSIVE ──────────────────────────────────────── */
+  @media (max-width: 1180px) {
+    .features-panel.active { grid-template-columns: repeat(3, 1fr); }
+  }
+
   @media (max-width: 900px) {
     .nav-links { display: none; }
     .problema-inner, .beta-inner { grid-template-columns: 1fr; gap: 3rem; }
@@ -827,6 +884,9 @@
   /* Interruptor grande: es el control mas importante de la pagina, tiene que
      verse como tal y no como un detalle del menu. */
   .aud-switch{ padding:5px; gap:4px; box-shadow:0 2px 14px rgba(0,0,0,.14); }
+  /* El selector va a la izquierda, pegado al logo; los enlaces quedan a la
+     derecha con el botón de entrar. */
+  .aud-switch-li{ margin-right:auto; margin-left:1.8rem; }
   .aud-switch-lbl{
     font-size:.68rem; letter-spacing:.1em; text-transform:uppercase;
     color:var(--texto-suave); padding:0 10px 0 8px; white-space:nowrap;
@@ -844,7 +904,8 @@
     }
     .nav-logo svg{ height:20px; }
     .nav-links{ display:flex !important; gap:0; order:3; width:100%; justify-content:center; }
-    .nav-links li:not(.aud-switch-li):not(:last-child){ display:none; }
+    .nav-links li:not(:last-child){ display:none; }
+    .aud-switch-li{ margin-left:0; margin-right:0; }
     .aud-switch-lbl{ display:none; }
     .aud-switch{ box-shadow:none; }
     .aud-switch button{ font-size:.85rem; padding:8px 18px; }
@@ -857,14 +918,19 @@
   @media (max-width:520px){ .hero{ padding-top: 15rem; } }
   @media (max-width:520px){
     .nav-links{ flex-wrap:wrap; row-gap:.5rem; }
-    .nav-links li.aud-switch-li{ width:100%; display:flex; justify-content:center; }
+    .aud-switch-li{ width:auto; }
     .nav-links li:last-child{ margin-left:0; width:100%; display:flex; justify-content:center; }
     .nav-cta{ width:100%; text-align:center; justify-content:center; }
   }
   /* Cinta de contexto arriba de todo, dice a quién le hablamos */
-  .aud-ribbon{ display:none; text-align:center; font-size:.8rem; padding:7px 16px; background:var(--menta-suave); color:var(--verde); }
+  .aud-ribbon{
+    display:none; text-align:center; font-size:.8rem; padding:7px 16px;
+    background:#071410; color:rgba(244,239,229,0.72);
+    border-bottom:1px solid rgba(126,200,164,0.10);
+  }
+  .aud-ribbon strong{ color:#F4EFE5; font-weight:500; }
   body.aud-pro .aud-ribbon-pro, body.aud-patient .aud-ribbon-patient{ display:block; }
-  .aud-ribbon a{ color:var(--verde); font-weight:600; text-decoration:underline; cursor:pointer; }
+  .aud-ribbon a{ color:#7EC8A4; font-weight:600; text-decoration:underline; cursor:pointer; }
 
   /* ══════════════════════════════════════════════════════════════
      PASE ESTETICO — aire, tipografia y ritmo tipo apple.com
@@ -1021,16 +1087,16 @@
 <!-- NAV -->
 <nav>
   <a href="#" class="nav-logo" style="display:flex;align-items:center"><svg viewBox="36 33 635 126" height="26" fill="currentColor" style="display:block" aria-label="Dormetria"><path d="M145 74 L 139 76 L 142 75 L 152 75 L 159 77 L 166 81 L 175 90 L 180 99 L 182 106 L 182 121 L 181 122 L 181 125 L 175 137 L 163 148 L 156 151 L 153 151 L 152 152 L 138 152 L 130 149 L 123 144 L 132 151 L 141 155 L 145 155 L 146 156 L 161 156 L 174 151 L 180 147 L 188 138 L 194 125 L 195 109 L 190 94 L 186 88 L 177 80 L 163 74 L 156 74 L 155 73 Z" fill-rule="evenodd"/><path d="M104 34 L 94 36 L 84 40 L 85 42 L 88 42 L 92 47 L 92 83 L 90 84 L 87 80 L 79 75 L 76 75 L 75 74 L 63 74 L 62 75 L 59 75 L 50 80 L 45 85 L 39 95 L 37 101 L 37 105 L 36 106 L 36 124 L 37 125 L 38 133 L 43 143 L 51 151 L 58 155 L 61 155 L 62 156 L 73 156 L 74 155 L 77 155 L 83 152 L 88 147 L 91 142 L 93 143 L 94 155 L 95 156 L 102 153 L 112 151 L 111 148 L 109 148 L 106 146 L 104 140 Z M70 79 L 74 79 L 82 82 L 89 90 L 92 100 L 92 129 L 91 130 L 91 133 L 88 140 L 81 147 L 76 149 L 68 149 L 61 146 L 54 139 L 51 133 L 50 125 L 49 124 L 49 104 L 50 103 L 51 96 L 56 87 L 60 83 L 65 80 L 69 80 Z" fill-rule="evenodd"/><path d="M248 74 L 238 75 L 232 79 L 226 89 L 224 88 L 224 75 L 223 74 L 205 80 L 205 82 L 208 82 L 212 86 L 212 147 L 210 150 L 204 152 L 205 154 L 234 154 L 234 152 L 229 151 L 226 149 L 224 143 L 224 108 L 225 107 L 225 102 L 229 91 L 234 86 L 236 85 L 244 85 L 250 88 L 251 83 L 254 77 Z" fill-rule="evenodd"/><path d="M260 79 L 260 82 L 263 82 L 267 86 L 267 90 L 268 91 L 268 142 L 267 143 L 267 148 L 264 151 L 260 152 L 260 154 L 288 154 L 288 152 L 284 151 L 280 147 L 280 101 L 286 88 L 290 84 L 294 82 L 305 82 L 307 83 L 312 88 L 315 97 L 315 146 L 311 151 L 307 153 L 308 154 L 335 154 L 335 152 L 331 151 L 329 149 L 327 142 L 327 104 L 328 103 L 328 99 L 330 93 L 333 88 L 336 85 L 342 82 L 352 82 L 357 85 L 361 91 L 362 99 L 363 100 L 363 143 L 361 149 L 359 151 L 355 152 L 355 154 L 383 154 L 383 152 L 379 151 L 375 146 L 375 100 L 374 99 L 374 93 L 371 84 L 369 81 L 364 77 L 357 74 L 346 74 L 340 76 L 331 84 L 327 91 L 325 90 L 325 88 L 322 82 L 318 78 L 313 75 L 310 75 L 309 74 L 298 74 L 288 79 L 281 88 L 279 87 L 279 74 L 267 78 Z" fill-rule="evenodd"/><path d="M418 74 L 406 79 L 396 90 L 391 102 L 391 106 L 390 107 L 390 124 L 391 125 L 391 129 L 393 135 L 399 145 L 409 153 L 411 153 L 414 155 L 417 155 L 418 156 L 431 156 L 432 155 L 435 155 L 444 150 L 451 142 L 454 137 L 455 132 L 452 131 L 449 137 L 439 145 L 432 147 L 426 147 L 419 145 L 413 141 L 408 135 L 403 123 L 402 111 L 403 110 L 455 110 L 455 101 L 454 100 L 453 93 L 450 87 L 444 80 L 435 75 L 432 75 L 431 74 Z M403 98 L 407 88 L 411 83 L 417 79 L 426 78 L 432 80 L 438 86 L 441 92 L 443 104 L 442 105 L 404 105 L 403 104 Z" fill-rule="evenodd"/><path d="M481 53 L 479 55 L 479 59 L 475 68 L 470 73 L 464 76 L 461 76 L 461 80 L 470 80 L 472 82 L 472 144 L 476 152 L 484 156 L 493 156 L 499 153 L 505 147 L 505 145 L 504 144 L 499 148 L 496 149 L 490 149 L 488 148 L 484 143 L 484 140 L 483 139 L 483 81 L 484 80 L 504 80 L 504 76 L 485 76 L 483 74 L 483 53 Z" fill-rule="evenodd"/><path d="M554 74 L 546 78 L 539 88 L 537 87 L 536 84 L 536 74 L 517 80 L 517 82 L 522 83 L 525 87 L 525 147 L 523 150 L 518 152 L 518 154 L 546 154 L 546 152 L 543 152 L 538 148 L 538 140 L 537 139 L 537 110 L 538 109 L 539 98 L 542 91 L 546 87 L 554 84 Z" fill-rule="evenodd"/><path d="M582 74 L 562 80 L 562 82 L 567 83 L 570 88 L 570 144 L 569 145 L 569 148 L 566 151 L 562 152 L 562 154 L 590 154 L 590 152 L 584 150 L 582 147 Z M580 43 L 575 46 L 573 50 L 573 54 L 574 57 L 577 60 L 584 61 L 588 59 L 590 56 L 590 49 L 586 44 Z" fill-rule="evenodd"/><path d="M613 79 L 610 81 L 606 86 L 603 93 L 603 96 L 614 99 L 615 91 L 619 83 L 624 79 L 633 78 L 640 81 L 644 86 L 646 92 L 646 101 L 643 105 L 637 108 L 617 114 L 609 118 L 602 125 L 599 135 L 600 136 L 600 142 L 603 148 L 610 154 L 616 156 L 628 156 L 636 153 L 641 149 L 644 144 L 646 143 L 647 144 L 647 148 L 651 154 L 655 156 L 662 156 L 666 154 L 670 149 L 669 148 L 662 149 L 659 146 L 659 140 L 658 139 L 658 112 L 659 111 L 658 110 L 658 93 L 655 85 L 652 81 L 647 77 L 637 74 L 626 74 Z M645 109 L 647 115 L 646 118 L 646 134 L 642 142 L 638 146 L 632 149 L 622 149 L 618 147 L 614 143 L 612 138 L 612 130 L 614 125 L 622 118 L 628 115 L 638 112 L 643 109 Z" fill-rule="evenodd"/></svg></a>
+  <div class="aud-switch-li"><div class="aud-switch">
+    <span class="aud-switch-lbl">Estoy viendo</span>
+    <button data-aud="pro" onclick="dmChooseAudience('pro')">Profesional</button>
+    <button data-aud="patient" onclick="dmChooseAudience('patient')">Paciente</button>
+  </div></div>
   <ul class="nav-links">
     <li><a href="#como-funciona">Cómo funciona</a></li>
     <li class="nav-link-pro"><a href="#para-medicos">El panel</a></li>
     <li class="nav-link-patient"><a href="#pacientes">La app</a></li>
     <li class="nav-link-pro"><a href="#beta">Beta</a></li>
-    <li class="aud-switch-li"><div class="aud-switch">
-      <span class="aud-switch-lbl">Estoy viendo</span>
-      <button data-aud="pro" onclick="dmChooseAudience('pro')">Profesional</button>
-      <button data-aud="patient" onclick="dmChooseAudience('patient')">Paciente</button>
-    </div></li>
     <li><a href="https://app.dormetria.com" class="nav-cta">Entrar a la app</a></li>
   </ul>
 </nav>
@@ -1038,6 +1104,10 @@
 <!-- HERO -->
 <section class="hero">
   <div class="hero-bg"></div>
+  <svg class="hero-skyline" viewBox="0 0 1440 330" preserveAspectRatio="xMidYMax slice" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M0 330 L0 12Q0 12 2 13Q3 14 4 32Q6 49 8 68Q9 87 10 95Q12 104 14 106Q15 108 16 113Q18 119 20 124Q21 129 22 122Q24 115 26 96Q27 77 28 63Q30 49 32 52Q33 55 34 68Q36 81 38 88Q39 95 40 92Q42 88 44 84Q45 80 46 84Q48 87 50 92Q51 98 52 99Q54 101 56 104Q57 107 58 123Q60 139 62 159Q63 178 64 178Q66 178 68 166Q69 155 70 148Q72 142 74 148Q75 154 76 162Q78 170 80 170Q81 170 82 170Q84 169 86 172Q87 176 88 172Q90 169 92 151Q93 132 94 113Q96 94 98 91Q99 89 100 97Q102 106 104 108Q105 111 106 107Q108 103 110 104Q111 105 112 109Q114 114 116 110Q117 107 118 100Q120 92 122 97Q123 102 124 120Q126 139 128 143Q129 148 130 146Q132 145 134 134Q135 123 136 106Q138 89 140 75Q141 61 142 55Q144 49 146 50Q147 52 148 56Q150 60 152 62Q153 63 154 63Q156 63 158 66Q159 69 160 77Q162 86 164 96Q165 107 166 104Q168 102 170 81Q171 60 172 44Q174 28 176 24Q177 21 178 27Q180 34 182 41Q183 49 184 50Q186 51 188 48Q189 45 190 45Q192 45 194 49Q195 54 196 59Q198 64 200 62Q201 60 202 52Q204 43 206 38Q207 32 208 39Q210 45 212 62Q213 80 214 78Q216 76 218 82Q219 89 220 98Q222 108 224 112Q225 116 226 112Q228 109 230 107Q231 106 232 101Q234 96 236 84Q237 73 238 61Q240 49 242 45Q243 42 244 49Q246 57 248 69Q249 81 250 86Q252 91 254 85Q255 79 256 68Q258 57 260 50Q261 44 262 45Q264 47 266 53Q267 58 268 62Q270 66 272 69Q273 72 274 79Q276 86 278 101Q279 116 280 135Q282 154 284 161Q285 168 286 160Q288 152 290 146Q291 140 292 138Q294 137 296 139Q297 142 298 145Q300 149 302 151Q303 153 304 153Q306 154 308 155Q309 157 310 162Q312 167 314 174Q315 182 316 185Q318 188 320 188Q321 188 322 189Q324 189 326 179Q327 168 328 157Q330 147 332 141Q333 135 334 134Q336 134 338 136Q339 138 340 140Q342 141 344 139Q345 137 346 134Q348 130 350 127Q351 124 352 125Q354 125 356 127Q357 129 358 129Q360 129 362 124Q363 119 364 110Q366 101 368 91Q369 82 370 77Q372 73 374 76Q375 80 376 89Q378 98 380 109Q381 120 382 128Q384 136 386 139Q387 143 388 145Q390 147 392 149Q393 151 394 146Q396 140 398 142Q399 144 400 155Q402 166 404 168Q405 170 406 164Q408 159 410 140Q411 121 412 108Q414 94 416 90Q417 87 418 85Q420 82 422 76Q423 71 424 69Q426 68 428 77Q429 86 430 97Q432 107 434 105Q435 103 436 91Q438 79 440 73Q441 68 442 77Q444 86 446 101Q447 116 448 124Q450 133 452 137Q453 142 454 151Q456 159 458 164Q459 170 460 171Q462 173 464 159Q465 145 466 133Q468 121 470 122Q471 124 472 133Q474 143 476 147Q477 151 478 142Q480 133 482 129Q483 126 484 126Q486 126 488 124Q489 123 490 120Q492 117 494 116Q495 116 496 121Q498 126 500 134Q501 142 502 147Q504 151 506 148Q507 145 508 138Q510 130 512 126Q513 121 514 125Q516 128 518 138Q519 148 520 158Q522 167 524 173Q525 178 526 181Q528 184 530 188Q531 192 532 198Q534 204 536 204Q537 204 538 204Q540 204 542 196Q543 188 544 179Q546 171 548 170Q549 168 550 173Q552 178 554 185Q555 192 556 193Q558 194 560 194Q561 194 562 194Q564 194 566 194Q567 194 568 159Q570 124 572 124Q573 124 574 124Q576 124 578 124Q579 124 580 124Q582 124 584 110Q585 96 586 110Q588 124 590 124Q591 124 592 118Q594 112 596 112Q597 112 598 112Q600 112 602 112Q603 112 604 98Q606 84 608 98Q609 112 610 112Q612 112 614 112Q615 112 616 112Q618 112 620 158Q621 205 622 205Q624 205 626 205Q627 205 628 205Q630 205 632 205Q633 205 634 205Q636 205 638 205Q639 205 640 205Q642 205 644 205Q645 205 646 205Q648 205 650 232Q651 259 652 259Q654 259 656 259Q657 259 658 259Q660 259 662 259Q663 259 664 259Q666 259 668 259Q669 259 670 259Q672 259 674 259Q675 259 676 259Q678 259 680 257Q681 256 682 255Q684 254 686 255Q687 257 688 261Q690 265 692 264Q693 263 694 263Q696 263 698 262Q699 260 700 257Q702 253 704 249Q705 245 706 245Q708 244 710 247Q711 251 712 253Q714 256 716 254Q717 252 718 250Q720 247 722 241Q723 234 724 230Q726 227 728 233Q729 238 730 245Q732 252 734 252Q735 252 736 253Q738 253 740 253Q741 254 742 254Q744 254 746 254Q747 254 748 254Q750 254 752 254Q753 254 754 254Q756 254 758 254Q759 254 760 251Q762 248 764 246Q765 244 766 249Q768 254 770 254Q771 253 772 249Q774 244 776 242Q777 240 778 230Q780 221 782 211Q783 201 784 205Q786 210 788 216Q789 223 790 221Q792 219 794 220Q795 220 796 223Q798 225 800 223Q801 221 802 223Q804 226 806 226Q807 226 808 226Q810 226 812 226Q813 226 814 226Q816 226 818 226Q819 226 820 224Q822 221 824 221Q825 221 826 221Q828 221 830 221Q831 221 832 221Q834 221 836 221Q837 221 838 221Q840 221 842 221Q843 221 844 221Q846 221 848 221Q849 221 850 221Q852 221 854 221Q855 221 856 221Q858 221 860 190Q861 158 862 158Q864 158 866 158Q867 158 868 158Q870 158 872 158Q873 158 874 158Q876 158 878 144Q879 130 880 144Q882 158 884 158Q885 158 886 158Q888 158 890 158Q891 158 892 141Q894 124 896 124Q897 124 898 124Q900 124 902 124Q903 124 904 124Q906 124 908 124Q909 124 910 124Q912 124 914 124Q915 124 916 110Q918 96 920 96Q921 96 922 110Q924 124 926 124Q927 124 928 124Q930 124 932 124Q933 124 934 124Q936 124 938 124Q939 124 940 124Q942 124 944 124Q945 124 946 124Q948 124 950 152Q951 181 952 179Q954 176 956 168Q957 159 958 140Q960 120 962 109Q963 98 964 106Q966 115 968 129Q969 142 970 145Q972 148 974 146Q975 144 976 146Q978 148 980 144Q981 141 982 123Q984 105 986 90Q987 74 988 78Q990 82 992 94Q993 105 994 100Q996 95 998 78Q999 61 1000 50Q1002 40 1004 36Q1005 33 1006 24Q1008 14 1010 8Q1011 1 1012 15Q1014 29 1016 55Q1017 82 1018 93Q1020 105 1022 98Q1023 91 1024 87Q1026 83 1028 91Q1029 98 1030 103Q1032 107 1034 106Q1035 104 1036 110Q1038 117 1040 131Q1041 144 1042 141Q1044 138 1046 127Q1047 115 1048 98Q1050 81 1052 82Q1053 82 1054 89Q1056 96 1058 100Q1059 103 1060 110Q1062 117 1064 123Q1065 130 1066 130Q1068 131 1070 124Q1071 118 1072 108Q1074 98 1076 91Q1077 84 1078 85Q1080 85 1082 91Q1083 97 1084 104Q1086 112 1088 117Q1089 122 1090 126Q1092 129 1094 134Q1095 139 1096 148Q1098 157 1100 167Q1101 177 1102 176Q1104 175 1106 173Q1107 170 1108 173Q1110 176 1112 169Q1113 161 1114 158Q1116 155 1118 158Q1119 161 1120 168Q1122 174 1124 178Q1125 182 1126 179Q1128 175 1130 172Q1131 170 1132 174Q1134 177 1136 180Q1137 183 1138 182Q1140 181 1142 181Q1143 180 1144 182Q1146 185 1148 178Q1149 171 1150 174Q1152 177 1154 164Q1155 151 1156 134Q1158 118 1160 110Q1161 101 1162 104Q1164 106 1166 111Q1167 116 1168 116Q1170 116 1172 110Q1173 103 1174 97Q1176 91 1178 89Q1179 87 1180 87Q1182 87 1184 82Q1185 76 1186 66Q1188 56 1190 50Q1191 44 1192 51Q1194 58 1196 75Q1197 92 1198 95Q1200 99 1202 85Q1203 70 1204 68Q1206 66 1208 69Q1209 72 1210 72Q1212 71 1214 69Q1215 67 1216 70Q1218 73 1220 82Q1221 90 1222 95Q1224 100 1226 93Q1227 87 1228 75Q1230 64 1232 61Q1233 59 1234 72Q1236 84 1238 101Q1239 118 1240 110Q1242 102 1244 99Q1245 97 1246 98Q1248 100 1250 99Q1251 99 1252 99Q1254 98 1256 101Q1257 104 1258 86Q1260 68 1262 59Q1263 50 1264 55Q1266 61 1268 73Q1269 84 1270 88Q1272 91 1274 84Q1275 77 1276 70Q1278 62 1280 61Q1281 60 1282 63Q1284 66 1286 65Q1287 64 1288 61Q1290 58 1292 63Q1293 68 1294 85Q1296 103 1298 124Q1299 146 1300 158Q1302 170 1304 165Q1305 159 1306 158Q1308 157 1310 163Q1311 169 1312 175Q1314 181 1316 178Q1317 175 1318 168Q1320 161 1322 158Q1323 155 1324 156Q1326 157 1328 157Q1329 156 1330 154Q1332 152 1334 156Q1335 159 1336 170Q1338 182 1340 173Q1341 164 1342 156Q1344 149 1346 146Q1347 143 1348 145Q1350 147 1352 151Q1353 154 1354 149Q1356 145 1358 139Q1359 133 1360 137Q1362 142 1364 141Q1365 141 1366 126Q1368 110 1370 102Q1371 94 1372 108Q1374 122 1376 134Q1377 147 1378 141Q1380 135 1382 127Q1383 118 1384 111Q1386 104 1388 88Q1389 71 1390 46Q1392 22 1394 21Q1395 20 1396 36Q1398 53 1400 38Q1401 22 1402 11Q1404 -1 1406 -2Q1407 -3 1408 6Q1410 15 1412 26Q1413 36 1414 42Q1416 47 1418 59Q1419 70 1420 69Q1422 69 1424 69Q1425 70 1426 74Q1428 79 1430 84Q1431 89 1432 89Q1434 89 1436 83Q1437 76 1438 68 L1440 59 L1440 330 Z" fill="#030a07"/></svg>
+  <div class="hero-veil"></div>
+  <div class="hero-stars" id="heroStars"></div>
+  <svg class="hero-moon" viewBox="30 62 174 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M145.00 74.00C142.33 74.50 139.50 75.83 139.00 76.00C138.50 76.17 139.83 75.17 142.00 75.00C144.17 74.83 149.17 74.67 152.00 75.00C154.83 75.33 156.67 76.00 159.00 77.00C161.33 78.00 163.33 78.83 166.00 81.00C168.67 83.17 172.67 87.00 175.00 90.00C177.33 93.00 178.83 96.33 180.00 99.00C181.17 101.67 181.67 102.33 182.00 106.00C182.33 109.67 182.17 118.33 182.00 121.00C181.83 123.67 181.17 121.33 181.00 122.00C180.83 122.67 182.00 122.50 181.00 125.00C180.00 127.50 178.00 133.17 175.00 137.00C172.00 140.83 166.17 145.67 163.00 148.00C159.83 150.33 157.67 150.50 156.00 151.00C154.33 151.50 153.67 150.83 153.00 151.00C152.33 151.17 154.50 151.83 152.00 152.00C149.50 152.17 141.67 152.50 138.00 152.00C134.33 151.50 132.50 150.33 130.00 149.00C127.50 147.67 122.67 143.67 123.00 144.00C123.33 144.33 129.00 149.17 132.00 151.00C135.00 152.83 138.83 154.33 141.00 155.00C143.17 155.67 144.17 154.83 145.00 155.00C145.83 155.17 143.33 155.83 146.00 156.00C148.67 156.17 156.33 156.83 161.00 156.00C165.67 155.17 170.83 152.50 174.00 151.00C177.17 149.50 177.67 149.17 180.00 147.00C182.33 144.83 185.67 141.67 188.00 138.00C190.33 134.33 192.83 129.83 194.00 125.00C195.17 120.17 195.67 114.17 195.00 109.00C194.33 103.83 191.50 97.50 190.00 94.00C188.50 90.50 188.17 90.33 186.00 88.00C183.83 85.67 180.83 82.33 177.00 80.00C173.17 77.67 166.50 75.00 163.00 74.00C159.50 73.00 157.33 74.17 156.00 74.00C154.67 73.83 156.83 73.00 155.00 73.00C153.17 73.00 147.67 73.50 145.00 74.00Z"/></svg>
   <div class="hero-inner">
   <div class="hero-content only-pro">
     <div class="hero-badge"><span></span> Beta abierta para profesionales</div>
@@ -1281,8 +1351,8 @@
     <div class="steps">
       <div class="step reveal">
         <span class="step-num">01</span>
-        <h3>El profesional configura</h3>
-        <p>Creás tu perfil profesional, seleccionás las escalas que usás en tu práctica y personalizás el seguimiento para cada paciente.</p>
+        <h3>El profesional elige</h3>
+        <p>Creás tu usuario, marcás las escalas que ya usás en tu práctica y listo. El seguimiento de cada paciente lo ajustás cuando quieras, no antes de empezar.</p>
       </div>
       <div class="step reveal">
         <span class="step-num">02</span>
@@ -1372,87 +1442,107 @@
 
     <div class="features-panel active" id="tab-medicos">
       <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg></div>
+        <h4>Vinculación de pacientes</h4>
+        <p>El paciente crea su cuenta solo y te comparte un código de seis caracteres. Lo pegás y queda conectado a tu panel, sin que cargues nada.</p>
+      </div>
+      <div class="feature-card reveal">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M7 7h.01M7 3h5a2 2 0 011.41.59l7 7a2 2 0 010 2.82l-5.59 5.59a2 2 0 01-2.82 0l-7-7A2 2 0 013 8.59V5a2 2 0 012-2z"/></svg></div>
         <h4>Etiquetas por patología</h4>
-        <p>Marcá cada paciente con SAHOS, insomnio, SPI, parasomnia, narcolepsia o cronodisrupción. Filtrás el listado con un toque y encontrás a quien buscás sin scrollear.</p>
+        <p>SAHOS, insomnio, SPI, parasomnia, narcolepsia o cronodisrupción. Filtrás el listado con un toque y encontrás a quien buscás sin scrollear.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/><path d="M18 6l3-3 0 0"/></svg></div>
-        <h4>Métricas de toda tu cartera</h4>
-        <p>Adherencia al día, quién aflojó y quién abandonó, tasa de abandono, evolución del score y escalas pedidas contra respondidas. Una vista global, no paciente por paciente.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 12h6m-6 4h6M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-3l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <h4>Diario de sueño</h4>
+        <p>Registra la noche desde el celular en dos minutos: horarios, latencia, despertares y hábitos. Con recordatorio a la hora que elija.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zM21 5a2 2 0 00-2-2h-2a2 2 0 00-2 2v14a2 2 0 002 2h2a2 2 0 002-2z"/></svg></div>
-        <h4>Métricas clínicas de la literatura</h4>
-        <p>Eficiencia de sueño, latencia, TIB, jet lag social, SD del punto medio, SRI (Phillips 2017) y CPD (Fischer 2016). Los parámetros con los que se sigue de verdad un trastorno del sueño.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 6h8M8 10h8M8 14h5M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+        <h4>Escalas validadas</h4>
+        <p>Epworth, Pittsburgh, ISI, STOP-Bang, Berlín y más de treinta. Se las pedís desde el panel y llegan puntuadas e interpretadas.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
-        <h4>Estudios en la misma ficha</h4>
-        <p>Subí polisomnografías, poligrafías respiratorias, actigrafías y laboratorio. Todo queda junto al diario y las escalas del paciente, sin buscar en otro lado.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+        <h4>Panel clínico y actograma</h4>
+        <p>Score de sueño con sus tres pilares, actograma de las últimas semanas y gráficos de tendencia. La evolución real, de un vistazo.</p>
       </div>
       <div class="feature-card reveal">
         <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2"/></svg></div>
-        <h4>Panel clínico completo</h4>
-        <p>Visualizá la evolución de cada paciente con gráficos de tendencia, scores por escala y alertas automáticas.</p>
+        <h4>Métricas clínicas de la literatura</h4>
+        <p>Eficiencia de sueño, latencia, TIB, jet lag social, SD del punto medio, SRI (Phillips 2017) y CPD (Fischer 2016).</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 6h8M8 10h8M8 14h5"/><rect x="4" y="3" width="16" height="18" rx="2"/></svg></div>
-        <h4>Escalas validadas integradas</h4>
-        <p>Epworth, Pittsburgh, ISI, STOP-Bang, Berlin y más. Aplicadas digitalmente, con scoring automático.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 00-4-5.7V5a2 2 0 10-4 0v.3C7.7 6.2 6 8.4 6 11v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+        <h4>Alertas automáticas</h4>
+        <p>Cuando un resultado cae en rango patológico aparece agrupado por paciente, con un botón para contactarlo por WhatsApp o mail.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6"/><path d="M16 5.5a3 3 0 010 5.5M21 20c0-2.5-1.5-4.6-3.5-5.5"/></svg></div>
-        <h4>Gestión de pacientes</h4>
-        <p>Vinculá pacientes a tu cuenta, revisá su historial completo y coordiná la atención desde cualquier dispositivo.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M13 10V3L4 14h7v7l9-11h-7z"/></svg></div>
+        <h4>Test de alerta incorporado</h4>
+        <p>Un PVT dentro de la app: le pedís al paciente que mida su estado de alerta y su rendimiento con un dato objetivo, no con su impresión.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 9h18M8 3v4M16 3v4"/></svg></div>
-        <h4>Historial de consultas</h4>
-        <p>Registrá notas de cada sesión con acceso al estado del paciente en ese momento. Trazabilidad completa.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 2C10 6 6 7 6 12a6 6 0 0012 0c0-5-4-6-6-10zM12 22v-6"/></svg></div>
+        <h4>Módulo TCC-I guiado</h4>
+        <p>El tratamiento de primera línea para el insomnio, con la ventana de sueño calculada desde el diario. El motor propone y vos ajustás.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M6 9a6 6 0 1112 0c0 4 1.5 5 2 6H4c.5-1 2-2 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg></div>
-        <h4>Solicitud de estudios</h4>
-        <p>Pedile al paciente que complete una escala específica o prepare información antes de la próxima consulta.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg></div>
+        <h4>Estudios y notas en la ficha</h4>
+        <p>Polisomnografías, poligrafías, actigrafías y laboratorio junto al diario. Más notas de cada consulta con el estado del paciente ese día.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 7l2-3h6l2 3h6a1 1 0 011 1v11a2 2 0 01-2 2H4a2 2 0 01-2-2V8a1 1 0 011-1z"/></svg></div>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/></svg></div>
         <h4>Directorio profesional</h4>
-        <p>Listá tu práctica en el directorio de Dormetria y recibí pacientes que buscan especialistas en sueño.</p>
+        <p>Publicá tu práctica en el directorio de Dormetria y recibí pacientes que buscan un especialista en sueño en tu zona.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 20V10M10 20V4M16 20v-7M22 20H2 M18 6l3-3"/></svg></div>
+        <h4>Métricas de toda tu cartera</h4>
+        <p>Adherencia al día, quién aflojó y quién abandonó, tasa de abandono, evolución del score y escalas pedidas contra respondidas.</p>
       </div>
     </div>
 
     <div class="features-panel" id="tab-pacientes">
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M21 12.8A9 9 0 1111.2 3a7 7 0 009.8 9.8z"/></svg></div>
-        <h4>Diario de sueño diario</h4>
-        <p>Registrá hora de acostarse, latencia, despertares, hora de levantarse y calidad subjetiva. En menos de 2 minutos.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 4v16m8-8H4"/></svg></div>
+        <h4>Empezás en un minuto</h4>
+        <p>Solo necesitás un correo. No hay que descargar nada de ninguna tienda: se instala desde el navegador con su propio ícono.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/></svg></div>
-        <h4>App móvil intuitiva</h4>
-        <p>Disponible para iOS y Android. Diseñada para ser fácil de usar, incluso para adultos mayores.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 12h6m-6 4h6M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2h-3l-2-2H9L7 5H5a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg></div>
+        <h4>Diario de sueño</h4>
+        <p>Anotás la noche en dos minutos: a qué hora te acostaste, cuánto tardaste en dormirte y cuántas veces te despertaste.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M3 17l5-5 4 4 8-8M21 8h-4M21 8v4"/></svg></div>
-        <h4>Actograma y métricas</h4>
-        <p>Visualizá tus horarios noche a noche, con latencia, despertares, eficiencia y regularidad calculadas automáticamente.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M15 17h5l-1.4-1.4A2 2 0 0118 14.2V11a6 6 0 00-4-5.7V5a2 2 0 10-4 0v.3C7.7 6.2 6 8.4 6 11v3.2a2 2 0 01-.6 1.4L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/></svg></div>
+        <h4>Recordatorios</h4>
+        <p>Elegís a qué hora querés que te avisemos y la app te lo recuerda cada mañana. Podés apagarlos cuando quieras.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 018 0v3"/></svg></div>
-        <h4>Privacidad garantizada</h4>
-        <p>Tus datos son tuyos. Solo el profesional que vos vinculás tiene acceso. Nunca se comparten con terceros.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg></div>
+        <h4>Tu score y tu actograma</h4>
+        <p>Un puntaje de sueño con sus tres pilares —cantidad, continuidad y regularidad— y el mapa de tus noches, para ver el patrón que no notabas.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M4 5a2 2 0 012-2h6v16H6a2 2 0 00-2 2V5z"/><path d="M20 5a2 2 0 00-2-2h-6v16h6a2 2 0 012 2V5z"/></svg></div>
-        <h4>Biblioteca de higiene del sueño</h4>
-        <p>Artículos breves y validados clínicamente sobre luz, temperatura, cafeína, alcohol y más — personalizados por cronótipo.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M8 6h8M8 10h8M8 14h5M5 21h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v14a2 2 0 002 2z"/></svg></div>
+        <h4>Escalas de estándar clínico</h4>
+        <p>Los mismos cuestionarios validados que se usan en consulta —Epworth, Pittsburgh, ISI— puntuados e interpretados, y comparables en el tiempo.</p>
       </div>
       <div class="feature-card reveal">
-        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M6 9a6 6 0 1112 0c0 4 1.5 5 2 6H4c.5-1 2-2 2-6z"/><path d="M10 20a2 2 0 004 0"/></svg></div>
-        <h4>Recordatorios inteligentes</h4>
-        <p>Notificaciones personalizadas para completar el diario, las escalas o preparar información para tu próxima consulta.</p>
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/></svg></div>
+        <h4>Biblioteca del sueño</h4>
+        <p>Artículos breves y validados sobre luz, temperatura, cafeína y horarios. Lo que sirve de verdad, sin consejos de internet.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M12 2C10 6 6 7 6 12a6 6 0 0012 0c0-5-4-6-6-10zM12 22v-6"/></svg></div>
+        <h4>Programa TCC-I guiado</h4>
+        <p>El tratamiento que las guías recomiendan primero para el insomnio, semana a semana y con tu ventana de sueño calculada desde tu diario.</p>
+      </div>
+      <div class="feature-card reveal">
+        <div class="feature-icon"><svg viewBox="0 0 24 24" fill="none" stroke="#1a4a3a" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="22" height="22"><path d="M17 20h5v-2a3 3 0 00-5.36-1.86M17 20H7m10 0v-2c0-.66-.13-1.28-.36-1.86M7 20H2v-2a3 3 0 015.36-1.86M7 20v-2c0-.66.13-1.28.36-1.86m0 0a5 5 0 019.28 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div>
+        <h4>Seguimiento profesional</h4>
+        <p>Si querés, compartís tus datos con un especialista en sueño mediante un código. Ve tu mes completo y ajusta el tratamiento sobre eso, no sobre lo que recordás.</p>
       </div>
     </div>
   </div>
@@ -1811,6 +1901,34 @@
       });
     });
     svg.innerHTML=out;
+  })();
+
+  // ── Estrellas del hero: mismo generador que la pantalla de inicio de la app
+  (function(){
+    var c=document.getElementById('heroStars'); if(!c) return;
+    var sh=document.createElement('style'), css='';
+    // Muchas más que en la app: el hero de escritorio es enorme y con 34
+    // estrellas la densidad quedaba en nada.
+    var N_ANIM = 60, N_PUNTOS = 190, N_CRUCES = 26;
+    for(var i=0;i<N_ANIM;i++){
+      var op=(Math.random()*0.55+0.18).toFixed(2);
+      css+='@keyframes hsTw'+i+'{0%,100%{opacity:'+op+'}50%{opacity:0.03}}';
+    }
+    sh.textContent=css; document.head.appendChild(sh);
+    var frag=document.createDocumentFragment();
+    for(var i=0;i<N_PUNTOS;i++){
+      var el=document.createElement('div'), sz=(Math.random()*2.1+0.7).toFixed(1);
+      // Más densas arriba (donde está el cielo abierto) que cerca del horizonte.
+      var top=Math.pow(Math.random(),1.5)*68;
+      el.style.cssText='position:absolute;width:'+sz+'px;height:'+sz+'px;border-radius:50%;background:#fff;left:'+(Math.random()*100).toFixed(2)+'%;top:'+top.toFixed(2)+'%;animation:hsTw'+(i%N_ANIM)+' '+(Math.random()*3.5+2).toFixed(1)+'s ease-in-out -'+(Math.random()*6).toFixed(1)+'s infinite';
+      frag.appendChild(el);
+    }
+    for(var i=0;i<N_CRUCES;i++){
+      var el=document.createElement('div');
+      el.style.cssText='position:absolute;left:'+(Math.random()*92+4).toFixed(2)+'%;top:'+(Math.pow(Math.random(),1.4)*58).toFixed(2)+'%;color:rgba(126,200,164,0.4);font-size:'+(Math.random()*5+8).toFixed(0)+'px;font-weight:300;font-family:sans-serif;line-height:1;animation:hsTw'+(i%N_ANIM)+' '+(Math.random()*4+3).toFixed(1)+'s ease-in-out -'+(Math.random()*5).toFixed(1)+'s infinite';
+      el.textContent='+'; frag.appendChild(el);
+    }
+    c.appendChild(frag);
   })();
 
   // ── Scroll reveal
