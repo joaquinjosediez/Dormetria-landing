@@ -8,7 +8,7 @@
 //
 // Variables de entorno en Netlify (Site configuration → Environment variables):
 //   ONESIGNAL_APP_ID   = 53980618-ff09-4477-94b0-445e5ec18050
-//   ONESIGNAL_API_KEY  = la REST API Key, que en el panel figura como
+//   ONESIGNAL_API_KEY  (o REST_API_KEY) = la REST API Key, que en el panel figura como
 //                        "Legacy API Key" (OneSignal → Settings → Keys & IDs).
 //                        OJO: NO es el App ID. El App ID es público y va en la
 //                        app; esta clave es secreta y solo vive acá.
@@ -22,11 +22,18 @@ const HORAS = [
 ];
 
 export default async () => {
+  // Acepta varios nombres para la clave: en Netlify puede haber quedado como
+  // REST_API_KEY, ONESIGNAL_API_KEY o ONESIGNAL_REST_API_KEY.
   const APP_ID = process.env.ONESIGNAL_APP_ID;
-  const API_KEY = process.env.ONESIGNAL_API_KEY;
+  const API_KEY = process.env.ONESIGNAL_API_KEY
+               || process.env.REST_API_KEY
+               || process.env.ONESIGNAL_REST_API_KEY;
   if (!APP_ID || !API_KEY) {
-    console.error('Faltan ONESIGNAL_APP_ID u ONESIGNAL_API_KEY');
-    return new Response('config', { status: 500 });
+    console.error('Falta el App ID o la REST key. Encontrado → APP_ID:', !!APP_ID, '· API_KEY:', !!API_KEY);
+    return new Response(JSON.stringify({
+      error: 'config',
+      falta: !APP_ID ? 'ONESIGNAL_APP_ID' : 'la REST key (ONESIGNAL_API_KEY o REST_API_KEY)'
+    }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 
   const resultados = [];
