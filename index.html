@@ -542,7 +542,15 @@
   .feature-card h4 { font-size: 1rem; font-weight: 500; color: var(--texto); margin-bottom: 0.5rem; }
   .feature-card p  { font-size: 0.88rem; color: var(--texto-suave); line-height: 1.6; font-weight: 300; }
 
-  /* ─── BETA ─────────────────────────────────────────────── */
+  /* "Entrar" es secundario: el botón que importa es "Crear cuenta" */
+  .nav-entrar{
+    color: rgba(255,255,255,0.62);
+    font-weight: 400;
+    margin-right: 0.2rem;
+  }
+  .nav-entrar:hover{ color: #fff; }
+
+  /* ─── EMPEZAR ──────────────────────────────────────────── */
   .section-beta {
     background: var(--verde-med);
     padding: 7rem 5vw;
@@ -1112,8 +1120,9 @@
     <li><a href="#como-funciona">Cómo funciona</a></li>
     <li class="nav-link-pro"><a href="#para-medicos">El panel</a></li>
     <li class="nav-link-patient"><a href="#pacientes">La app</a></li>
-    <li class="nav-link-pro"><a href="#beta">Beta</a></li>
-    <li><a href="https://app.dormetria.com" class="nav-cta">Entrar a la app</a></li>
+    <li><a href="https://app.dormetria.com" class="nav-entrar">Entrar</a></li>
+    <li class="nav-link-pro"><a href="https://app.dormetria.com/?crear=1&amp;rol=pro" class="nav-cta">Crear cuenta</a></li>
+    <li class="nav-link-patient"><a href="https://app.dormetria.com/?crear=1" class="nav-cta">Crear cuenta</a></li>
   </ul>
 </nav>
 
@@ -1126,15 +1135,15 @@
   <svg class="hero-moon" viewBox="30 62 174 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M145.00 74.00C142.33 74.50 139.50 75.83 139.00 76.00C138.50 76.17 139.83 75.17 142.00 75.00C144.17 74.83 149.17 74.67 152.00 75.00C154.83 75.33 156.67 76.00 159.00 77.00C161.33 78.00 163.33 78.83 166.00 81.00C168.67 83.17 172.67 87.00 175.00 90.00C177.33 93.00 178.83 96.33 180.00 99.00C181.17 101.67 181.67 102.33 182.00 106.00C182.33 109.67 182.17 118.33 182.00 121.00C181.83 123.67 181.17 121.33 181.00 122.00C180.83 122.67 182.00 122.50 181.00 125.00C180.00 127.50 178.00 133.17 175.00 137.00C172.00 140.83 166.17 145.67 163.00 148.00C159.83 150.33 157.67 150.50 156.00 151.00C154.33 151.50 153.67 150.83 153.00 151.00C152.33 151.17 154.50 151.83 152.00 152.00C149.50 152.17 141.67 152.50 138.00 152.00C134.33 151.50 132.50 150.33 130.00 149.00C127.50 147.67 122.67 143.67 123.00 144.00C123.33 144.33 129.00 149.17 132.00 151.00C135.00 152.83 138.83 154.33 141.00 155.00C143.17 155.67 144.17 154.83 145.00 155.00C145.83 155.17 143.33 155.83 146.00 156.00C148.67 156.17 156.33 156.83 161.00 156.00C165.67 155.17 170.83 152.50 174.00 151.00C177.17 149.50 177.67 149.17 180.00 147.00C182.33 144.83 185.67 141.67 188.00 138.00C190.33 134.33 192.83 129.83 194.00 125.00C195.17 120.17 195.67 114.17 195.00 109.00C194.33 103.83 191.50 97.50 190.00 94.00C188.50 90.50 188.17 90.33 186.00 88.00C183.83 85.67 180.83 82.33 177.00 80.00C173.17 77.67 166.50 75.00 163.00 74.00C159.50 73.00 157.33 74.17 156.00 74.00C154.67 73.83 156.83 73.00 155.00 73.00C153.17 73.00 147.67 73.50 145.00 74.00Z"/></svg>
   <div class="hero-inner">
   <div class="hero-content only-pro">
-    <div class="hero-badge"><span></span> Beta abierta para profesionales</div>
+    <div class="hero-badge"><span></span> Sin costo · Empezás hoy</div>
     <h1>El seguimiento del sueño,<br><em>en serio.</em></h1>
     <p class="hero-sub">Lo que el paciente vive, no lo que recuerda: diario, escalas validadas, actograma y métricas clínicas entre consulta y consulta.</p>
     <div class="hero-actions">
-      <a href="#beta" class="btn-primary">
+      <a href="https://app.dormetria.com/?crear=1&amp;rol=pro" class="btn-primary">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Quiero ser beta tester
+        Crear mi cuenta
       </a>
-      <a href="https://app.dormetria.com" class="btn-secondary">Entrar al panel</a>
+      <a href="https://app.dormetria.com" class="btn-secondary">Ya tengo cuenta</a>
     </div>
     <div class="hero-patient-line">
       ¿No sos profesional y querés medir tu sueño? <a onclick="dmChooseAudience('patient')" style="cursor:pointer">Ver Dormetria para vos</a>
@@ -1156,15 +1165,15 @@
   </div>
 
   <div class="hero-content only-patient">
-    <div class="hero-badge"><span></span> Sin costo durante la beta</div>
+    <div class="hero-badge"><span></span> Gratis · Sin instalar nada</div>
     <h1>Entendé cómo dormís,<br><em>con tus datos.</em></h1>
     <p class="hero-sub">Registrá tu noche en dos minutos y descubrí qué mejora tu descanso y qué lo arruina — sobre tus propios números, no sobre la sensación de la mañana siguiente.</p>
     <div class="hero-actions">
-      <a href="https://app.dormetria.com" class="btn-primary">
+      <a href="https://app.dormetria.com/?crear=1" class="btn-primary">
         <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-        Empezar ahora
+        Crear mi cuenta
       </a>
-      <a href="#pacientes" class="btn-secondary">Ver cómo funciona</a>
+      <a href="https://app.dormetria.com" class="btn-secondary">Ya tengo cuenta</a>
     </div>
     <div class="hero-patient-line">
       ¿Sos profesional de la salud? <a onclick="dmChooseAudience('pro')" style="cursor:pointer">Ver Dormetria para tu consultorio</a>
@@ -1330,7 +1339,7 @@
       </div>
     </div>
     <div style="text-align:center;margin-top:2.5rem">
-      <a href="https://app.dormetria.com" class="btn-primary" style="background:var(--verde);color:#fff">Empezar ahora</a>
+      <a href="https://app.dormetria.com/?crear=1" class="btn-primary" style="background:var(--verde);color:#fff">Crear mi cuenta</a>
     </div>
   </div>
 </section>
@@ -1679,7 +1688,7 @@
 </div>
       <div class="pac-card">
         <h3>Empezá a registrar tu sueño</h3>
-        <p>Diario de sueño, escalas clínicas validadas y tus gráficos de evolución, en tu navegador. Durante la beta, el acceso es sin costo.</p>
+        <p>Diario de sueño, escalas clínicas validadas y tus gráficos de evolución, en tu navegador. El acceso es sin costo.</p>
         <a href="https://app.dormetria.com" class="btn-pac">
           Creá tu usuario
           <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
@@ -1788,79 +1797,55 @@
 </div>
 </section>
 
-<!-- BETA -->
-<section class="section-beta only-pro" id="beta">
+<!-- EMPEZAR -->
+<section class="section-beta only-pro" id="empezar">
   <div class="beta-inner">
     <div class="beta-texto reveal">
-      <p class="label-seccion">Beta abierta</p>
-      <h2>Sé parte desde<br>el principio.</h2>
-      <p>Estamos abriendo Dormetria a un grupo reducido de profesionales de la salud para iterar junto a quienes la van a usar. Si no sos profesional, no necesitás esperar: podés <a href="https://app.dormetria.com" style="color:var(--menta);text-decoration:underline">entrar a la app</a> y empezar a registrar tu sueño.</p>
-      <p>Como beta tester tenés acceso completo, sin costo, y tu feedback va a dar forma a la plataforma definitiva.</p>
+      <p class="label-seccion">Empezá hoy</p>
+      <h2>Tu primer paciente,<br>en cinco minutos.</h2>
+      <p>Creás tu cuenta, le pasás el código a un paciente y desde esa misma noche empezás a ver sus registros. No hay demo que pedir ni aprobación que esperar.</p>
       <ul class="beta-lista">
-        <li>Acceso completo a todas las funcionalidades</li>
-        <li>Sin costo durante el período beta</li>
-        <li>Soporte directo del equipo de Dormetria</li>
-        <li>Influencia real en el desarrollo del producto</li>
-        <li>Condiciones preferenciales al lanzamiento oficial</li>
+        <li>Sin costo, sin tarjeta</li>
+        <li>Todas las funciones disponibles desde el primer día</li>
+        <li>Tus pacientes usan la app gratis</li>
+        <li>Podés dar de alta un paciente vos mismo o que se vincule con un código</li>
       </ul>
     </div>
     <div class="beta-form reveal">
-      <div id="form-wrapper">
-        <h3>Quiero ser beta tester</h3>
-        <p class="form-sub">Solo para profesionales de la salud. Te contactamos en 48hs.</p>
-        <div class="form-row">
-          <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" id="inp-nombre" placeholder="Tu nombre">
-          </div>
-          <div class="form-group">
-            <label>Apellido</label>
-            <input type="text" id="inp-apellido" placeholder="Tu apellido">
-          </div>
-        </div>
-        <div class="form-group">
-          <label>Email profesional</label>
-          <input type="email" id="inp-email" placeholder="tu@email.com">
-        </div>
-        <div class="form-group">
-          <label>Especialidad</label>
-          <select id="inp-especialidad">
-            <option value="" disabled selected>Seleccioná tu especialidad</option>
-            <option>Psiquiatría</option>
-            <option>Psicología</option>
-            <option>Neurología</option>
-            <option>Otorrinolaringología</option>
-            <option>Neumonología / Neumología</option>
-            <option>Cardiología</option>
-            <option>Clínica Médica / Medicina Interna</option>
-            <option>Fonoaudiología</option>
-            <option>Terapia Ocupacional</option>
-            <option>Pediatría</option>
-            <option>Medicina del Sueño</option>
-            <option>Otra especialidad</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>País</label>
-          <select id="inp-pais">
-            <option value="" disabled selected>¿Desde dónde ejercés?</option>
-            <option>Argentina</option>
-            <option>México</option>
-            <option>Colombia</option>
-            <option>Chile</option>
-            <option>España</option>
-            <option>Uruguay</option>
-            <option>Perú</option>
-            <option>Otro</option>
-          </select>
-        </div>
-        <button class="btn-form" id="btn-enviar">Solicitar acceso beta →</button>
-        <p class="form-disclaimer">Al registrarte aceptás que te contactemos por email. Sin spam, sin terceros.</p>
+      <div id="form-wrapper" style="text-align:center">
+        <h3>Crear cuenta profesional</h3>
+        <p class="form-sub">Tres datos y entrás. Nada más.</p>
+        <a href="https://app.dormetria.com/?crear=1&amp;rol=pro" class="btn-form" style="display:block;text-decoration:none;text-align:center;margin-top:1.4rem">Crear mi cuenta →</a>
+        <p class="form-disclaimer" style="margin-top:1.2rem">
+          ¿Ya tenés cuenta? <a href="https://app.dormetria.com" style="color:var(--menta)">Entrar al panel</a>
+        </p>
       </div>
-      <div class="success-msg" id="success-msg">
-        <div class="success-icon">✓</div>
-        <h4>¡Recibimos tu solicitud!</h4>
-        <p>Te vamos a contactar a la brevedad para darte acceso a la beta de Dormetria.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EMPEZAR · PACIENTES -->
+<section class="section-beta only-patient" id="empezar-paciente">
+  <div class="beta-inner">
+    <div class="beta-texto reveal">
+      <p class="label-seccion">Empezá hoy</p>
+      <h2>Esta noche ya podés<br>registrar la primera.</h2>
+      <p>Creás tu cuenta con un correo y una contraseña, y mañana a la mañana cargás cómo dormiste. En dos minutos. A los siete días la app ya te muestra tus primeros patrones.</p>
+      <ul class="beta-lista">
+        <li>Gratis</li>
+        <li>No hay que instalar nada: funciona en el navegador del celular</li>
+        <li>Tus datos son tuyos: los compartís solo si querés</li>
+        <li>Si tenés un profesional en Dormetria, le pasás tu código y listo</li>
+      </ul>
+    </div>
+    <div class="beta-form reveal">
+      <div style="text-align:center">
+        <h3>Crear mi cuenta</h3>
+        <p class="form-sub">Un correo y una contraseña. Nada más.</p>
+        <a href="https://app.dormetria.com/?crear=1" class="btn-form" style="display:block;text-decoration:none;text-align:center;margin-top:1.4rem">Empezar ahora →</a>
+        <p class="form-disclaimer" style="margin-top:1.2rem">
+          ¿Ya tenés cuenta? <a href="https://app.dormetria.com" style="color:var(--menta)">Entrar</a>
+        </p>
       </div>
     </div>
   </div>
@@ -1876,7 +1861,7 @@
     <ul class="footer-links">
       <li><a href="#como-funciona">Cómo funciona</a></li>
       <li><a href="#para-medicos">Funcionalidades</a></li>
-      <li><a href="#beta">Beta</a></li>
+      <li><a href="#empezar">Empezar</a></li>
       <li><a href="#pacientes">Para pacientes</a></li>
       <li><a href="https://app.dormetria.com">Entrar a la app</a></li>
       <li><a href="mailto:hola@dormetria.com">Contacto</a></li>
@@ -1979,66 +1964,11 @@
     });
   };
 
-  // ── Configuración
-  const SUPABASE_URL  = 'https://sojvsbwpqdwjuvezdhby.supabase.co';
-  const SUPABASE_KEY  = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNvanZzYndwcWR3anV2ZXpkaGJ5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc1MzA2MjcsImV4cCI6MjA5MzEwNjYyN30.WiERGJ6PYcKGxQ5jgVGJ2U_t0cvviam2dYvqt9_GoA8';
-  // La clave de Resend YA NO vive aca: cualquiera podia verla con "ver codigo"
-  // fuente y mandar mails en tu nombre. Ahora la guarda Netlify como variable
-  // de entorno y solo la usa la funcion del servidor (netlify/functions/notify-beta).
-  const NOTIFY_EMAIL  = 'diezjoaquinjose@gmail.com';
 
-  // ── Form
-  document.getElementById('btn-enviar').addEventListener('click', async () => {
-    const nombre      = document.getElementById('inp-nombre').value.trim();
-    const apellido    = document.getElementById('inp-apellido').value.trim();
-    const email       = document.getElementById('inp-email').value.trim();
-    const especialidad= document.getElementById('inp-especialidad').value;
-    const pais        = document.getElementById('inp-pais').value;
-
-    if (!nombre || !email || !especialidad) {
-      alert('Por favor completá al menos nombre, email y especialidad.');
-      return;
-    }
-
-    const btn = document.getElementById('btn-enviar');
-    btn.textContent = 'Enviando...';
-    btn.disabled = true;
-
-    try {
-      // 1. Guardar en Supabase
-      const sbRes = await fetch(`${SUPABASE_URL}/rest/v1/beta_registros`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'apikey': SUPABASE_KEY,
-          'Authorization': `Bearer ${SUPABASE_KEY}`,
-          'Prefer': 'return=minimal'
-        },
-        body: JSON.stringify({ nombre, apellido, email, especialidad, pais })
-      });
-
-      if (!sbRes.ok) throw new Error('Error al guardar en base de datos');
-
-      // 2. Notificar por mail desde el servidor (la clave nunca llega al navegador)
-      try{
-        await fetch('/.netlify/functions/notify-beta', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ nombre, apellido, email, especialidad, pais })
-        });
-      }catch(_){ /* el registro ya quedo guardado; el mail es secundario */ }
-
-      // 3. Mostrar éxito
-      document.getElementById('form-wrapper').style.display = 'none';
-      document.getElementById('success-msg').style.display  = 'block';
-
-    } catch (err) {
-      console.error(err);
-      btn.textContent = 'Solicitar acceso beta →';
-      btn.disabled = false;
-      alert('Hubo un problema al enviar. Por favor intentá de nuevo.');
-    }
-  });
+  // El formulario de solicitud de beta se sacó: ya no hay lista de espera,
+  // se crea la cuenta directamente en la app. Si quedara este bloque, el
+  // addEventListener sobre un boton inexistente tiraria un TypeError y
+  // cortaria todo el script que viene despues.
 </script>
 
 <script>
